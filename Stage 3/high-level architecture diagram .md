@@ -3,44 +3,23 @@
 
 ```mermaid
 flowchart LR
+    subgraph Client["Client Layer"]
+        FE["Frontend<br/>(React + Vite)"]
+    end
 
-  subgraph Frontend
-    RA[React App]
-    SM[State Management<br/>Redux]
-  end
+    subgraph Server["Server Layer"]
+        BE["Backend<br/>(Java Spring Boot)"]
+    end
 
-  subgraph Backend
-    API[Node Express API<br/>Express API]
-    AUTH[Auth Service]
-    BL[Business Logic]
-  end
+    subgraph Data["Data Layer"]
+        DB[(PostgreSQL<br/>Database)]
+    end
 
-  subgraph Data_Layer[Data Layer]
-    PG[(PostgreSQL)]
-    REDIS[(Redis Cache)]
-  end
+    subgraph External["External APIs"]
+        MOYASAR["Payment API<br/>(Moyasar)"]
+    end
 
-  subgraph External_Services[External Services]
-    OWM[OpenWeatherMap]
-    EMAIL[Email Service]
-  end
-
-  %% Frontend to Backend
-  RA -->|HTTP requests| API
-  API -->|JSON responses| RA
-  RA -->|login/signup| AUTH
-
-  %% Auth flow
-  AUTH <-->|session tokens| REDIS
-
-  %% Backend to Data
-  API <-->|CRUD operations| PG
-  API <-->|caching| REDIS
-
-  %% Internal backend flow
-  API --> BL
-
-  %% External integrations
-  BL -->|fetch weather| OWM
-  BL -->|notifications| EMAIL
+    FE <-->|"HTTP Requests / JSON"| BE
+    BE <-->|"Queries / Responses"| DB
+    BE <-->|"Payment Processing"| MOYASAR
 ```
