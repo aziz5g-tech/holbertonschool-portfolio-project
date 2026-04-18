@@ -35,6 +35,7 @@ graph TD
     API -->|6. Map Routing| Maps
 ```
 
+```mermaid
 graph TD
     subgraph Client_Layer [Users & Relatives]
         Seeker[Seeker App]
@@ -68,3 +69,4 @@ graph TD
     API -->|4. Store/Get Photos| Storage
     API -->|5. Real-time Notification| Notify
     API -->|6. Map Routing| Maps
+```
