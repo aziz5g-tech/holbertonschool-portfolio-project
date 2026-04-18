@@ -4,15 +4,15 @@
 ```mermaid
 flowchart LR
     subgraph Client["Client Layer"]
-        FE["Frontend<br/>(React + Vite)"]
+        FE["Frontend<br/>(abc....)"]
     end
 
     subgraph Server["Server Layer"]
-        BE["Backend<br/>(Java Spring Boot)"]
+        BE["Backend<br/>(Python + FLASK)"]
     end
 
     subgraph Data["Data Layer"]
-        DB[(PostgreSQL<br/>Database)]
+        DB[(abc....<br/>Database)]
     end
 
     subgraph External["External APIs"]
