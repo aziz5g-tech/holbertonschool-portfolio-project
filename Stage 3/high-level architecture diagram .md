@@ -30,20 +30,20 @@ flowchart LR
 sequenceDiagram
     participant User
     participant React as React Frontend
-    participant Spring as Spring Boot API
+    participant API
     participant DB as PostgreSQL
     participant Moyasar as Moyasar API
 
     User->>React: Interact with UI
-    React->>Spring: HTTP Request (JSON)
+    React->>API: HTTP Request (JSON)
     Spring->>DB: Query/Update Data
-    DB-->>Spring: Response
+    DB-->>API: Response
     
     alt Payment Required
-        Spring->>Moyasar: Process Payment
-        Moyasar-->>Spring: Payment Result
+        API->>Moyasar: Process Payment
+        Moyasar-->>API: Payment Result
     end
     
-    Spring-->>React: JSON Response
+    API-->>React: JSON Response
     React-->>User: Update UI
 ```
