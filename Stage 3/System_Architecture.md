@@ -2,80 +2,48 @@
 
 ## 1️⃣ High-Level Package Diagram (Three-Layer Architecture)
 
+# MVP System Architecture
+
 ```mermaid
-graph TB
-    subgraph "Presentation Layer"
-        WEB["🌐 Web Client<br/>React.js"]
-        MOBILE["📱 Mobile Client<br/>React Native"]
-    end
+flowchart LR
 
-    subgraph "Business Logic Layer (Facade Pattern)"
-        FACADE["🎭 API Facade<br/>Controllers & Routers"]
-        
-        subgraph "Services"
-            USERSERVICE["👤 User Service"]
-            PLACESERVICE["📍 Place Service"]
-            REVIEWSERVICE["⭐ Review Service"]
-            AUTHSERVICE["🔐 Auth Service"]
-        end
+  subgraph Frontend
+    RA[React App]
+    SM[State Management<br/>Redux]
+  end
 
-        subgraph "Business Objects"
-            USEROBJ["User Entity"]
-            PLACEOBJ["Place Entity"]
-            REVIEWOBJ["Review Entity"]
-            AMENITYOBJ["Amenity Entity"]
-        end
+  subgraph Backend
+    API[Node Express API<br/>Express API]
+    AUTH[Auth Service]
+    BL[Business Logic]
+  end
 
-        FACADE -->|Route Requests| USERSERVICE
-        FACADE -->|Route Requests| PLACESERVICE
-        FACADE -->|Route Requests| REVIEWSERVICE
-        FACADE -->|Route Requests| AUTHSERVICE
+  subgraph Data_Layer[Data Layer]
+    PG[(PostgreSQL)]
+    REDIS[(Redis Cache)]
+  end
 
-        USERSERVICE -->|Manage| USEROBJ
-        PLACESERVICE -->|Manage| PLACEOBJ
-        REVIEWSERVICE -->|Manage| REVIEWOBJ
-        PLACEOBJ -->|Contains| AMENITYOBJ
-    end
+  subgraph External_Services[External Services]
+    OWM[OpenWeatherMap]
+    EMAIL[Email Service]
+  end
 
-    subgraph "Data Access Layer"
-        USERREPO["User Repository"]
-        PLACEREPO["Place Repository"]
-        REVIEWREPO["Review Repository"]
-        AMENITYREPO["Amenity Repository"]
+  %% Frontend to Backend
+  RA -->|HTTP requests| API
+  API -->|JSON responses| RA
+  RA -->|login/signup| AUTH
 
-        subgraph "Database"
-            DB["🗄️ PostgreSQL Database"]
-        end
+  %% Auth flow
+  AUTH <-->|session tokens| REDIS
 
-        USERREPO -->|Query/Update| DB
-        PLACEREPO -->|Query/Update| DB
-        REVIEWREPO -->|Query/Update| DB
-        AMENITYREPO -->|Query/Update| DB
-    end
+  %% Backend to Data
+  API <-->|CRUD operations| PG
+  API <-->|caching| REDIS
 
-    WEB -->|HTTP/REST| FACADE
-    MOBILE -->|HTTP/REST| FACADE
+  %% Internal backend flow
+  API --> BL
 
-    USERSERVICE -->|Use| USERREPO
-    PLACESERVICE -->|Use| PLACEREPO
-    PLACESERVICE -->|Use| AMENITYREPO
-    REVIEWSERVICE -->|Use| REVIEWREPO
-
-    style WEB fill:#4A90E2,color:#fff
-    style MOBILE fill:#4A90E2,color:#fff
-    style FACADE fill:#F5A623,color:#fff
-    style USERSERVICE fill:#7ED321
-    style PLACESERVICE fill:#7ED321
-    style REVIEWSERVICE fill:#7ED321
-    style AUTHSERVICE fill:#7ED321
-    style USEROBJ fill:#50E3C2,color:#fff
-    style PLACEOBJ fill:#50E3C2,color:#fff
-    style REVIEWOBJ fill:#50E3C2,color:#fff
-    style AMENITYOBJ fill:#50E3C2,color:#fff
-    style USERREPO fill:#BD10E0,color:#fff
-    style PLACEREPO fill:#BD10E0,color:#fff
-    style REVIEWREPO fill:#BD10E0,color:#fff
-    style AMENITYREPO fill:#BD10E0,color:#fff
-    style DB fill:#FF6B6B,color:#fff
+  %% External integrations
+  BL -->|fetch weather| OWM
+  BL -->|notifications| EMAIL
 ```
-
