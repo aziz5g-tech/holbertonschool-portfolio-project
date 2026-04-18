@@ -31,13 +31,13 @@ sequenceDiagram
     participant User
     participant React as React Frontend
     participant API
-    participant DB as PostgreSQL
+    participant MySql
     participant Moyasar as Moyasar API
 
     User->>React: Interact with UI
     React->>API: HTTP Request (JSON)
-    API->>DB: Query/Update Data
-    DB-->>API: Response
+    API->>MySql: Query/Update Data
+    MySql-->>API: Response
     
     alt Payment Required
         API->>Moyasar: Process Payment
