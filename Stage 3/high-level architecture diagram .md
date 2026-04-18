@@ -29,21 +29,21 @@ flowchart LR
 ```mermaid
 sequenceDiagram
     participant User
-    participant abc1 Frontend
-    participant abc2 Boot API
-    participant abc3
-    participant abc4 API
+    participant React as React Frontend
+    participant Spring as Spring Boot API
+    participant DB as PostgreSQL
+    participant Moyasar as Moyasar API
 
-    User->>abc1: Interact with UI
-    abc1->>abc2: HTTP Request (JSON)
-    abc2->>abc3: Query/Update Data
-    abc3-->>abc2: Response
+    User->>React: Interact with UI
+    React->>Spring: HTTP Request (JSON)
+    Spring->>DB: Query/Update Data
+    DB-->>Spring: Response
     
     alt Payment Required
-        abc2->>abc4: Process Payment
-        abc4-->>abc2: Payment Result
+        Spring->>Moyasar: Process Payment
+        Moyasar-->>Spring: Payment Result
     end
     
-    abc2-->>abc1: JSON Response
-    abc1-->>User: Update UI
+    Spring-->>React: JSON Response
+    React-->>User: Update UI
 ```
