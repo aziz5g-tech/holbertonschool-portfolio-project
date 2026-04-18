@@ -12,7 +12,7 @@ flowchart LR
     end
 
     subgraph Data["Data Layer"]
-        DB[(abc....<br/>Database)]
+        DB[(MySql<br/>Database)]
     end
 
     subgraph External["External APIs"]
