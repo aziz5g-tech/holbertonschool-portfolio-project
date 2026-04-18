@@ -36,7 +36,7 @@ sequenceDiagram
 
     User->>React: Interact with UI
     React->>API: HTTP Request (JSON)
-    Spring->>DB: Query/Update Data
+    API->>DB: Query/Update Data
     DB-->>API: Response
     
     alt Payment Required
