@@ -1,4 +1,3 @@
-# System Architecture Diagram - المرافق (Al-Murafeq)
 
 ## 1️⃣ High-Level Package Diagram (Three-Layer Architecture)
 
