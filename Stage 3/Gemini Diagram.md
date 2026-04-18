@@ -1,5 +1,3 @@
-```markdown
-## System Architecture - Companion Platform
 
 ```mermaid
 graph TD
