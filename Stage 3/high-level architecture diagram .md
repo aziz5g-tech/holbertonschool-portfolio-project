@@ -1,7 +1,5 @@
-
-## 1️⃣ High-Level Package Diagram (Three-Layer Architecture)
-
 # MVP System Architecture
+## 1️⃣ High-Level Package Diagram (Three-Layer Architecture)
 
 ```mermaid
 flowchart LR
