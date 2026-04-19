@@ -1,3 +1,4 @@
+```mermaid
 classDiagram
 
 class UserController {
@@ -99,3 +100,4 @@ CompanionService --> MySQLRepository
 
 NotificationService --> FirebaseService
 AuthService --> FirebaseService
+```
