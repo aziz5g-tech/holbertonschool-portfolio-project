@@ -1,4 +1,3 @@
-Use Case: Create Service Request (Elderly User Requests Assistance)
 
 sequenceDiagram
     participant User
@@ -30,7 +29,6 @@ sequenceDiagram
 
 
 
-Use Case: Real-Time Trip Tracking (Family Monitoring)
 
     sequenceDiagram
     participant Companion
@@ -56,7 +54,6 @@ Use Case: Real-Time Trip Tracking (Family Monitoring)
 
 
 
-Use Case: Real-Time Trip Tracking (Family Monitoring)
 
     sequenceDiagram
     participant Companion
