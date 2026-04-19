@@ -1,5 +1,7 @@
 1️⃣ Use Case: Create Service Request (Elderly User Requests Assistance)
 
+```mermaid
+
 sequenceDiagram
     participant User
     participant Frontend as React Frontend
@@ -25,11 +27,12 @@ sequenceDiagram
     API-->>Frontend: Request confirmation
     Frontend-->>User: Show success message
 
-
+```
 
 
 2️⃣ Use Case: Accept Request & Share Companion Details
 
+```mermaid
 
     sequenceDiagram
     participant Companion
@@ -52,9 +55,11 @@ sequenceDiagram
 
     API-->>Frontend: Return companion contact details
     Frontend-->>Companion: Display request details
+```
 
 3️⃣ Use Case: Real-Time Trip Tracking (Family Monitoring)
 
+```mermaid
 
     sequenceDiagram
     participant Companion
@@ -72,3 +77,5 @@ sequenceDiagram
     FirebaseDB-->>Family: Notify status change
 
     Family-->>Family: View live tracking on map
+```
+
