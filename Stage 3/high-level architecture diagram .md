@@ -42,20 +42,37 @@ flowchart LR
 sequenceDiagram
     participant User
     participant React as React Frontend
-    participant API
+    participant Firebase
+    participant API as Flask Backend
     participant MySql
     participant Moyasar as Moyasar API
 
+    %% User Interaction
     User->>React: Interact with UI
-    React->>API: HTTP Request (JSON)
-    API->>MySql: Query/Update Data
-    MySql-->>API: Response
-    
+
+    %% Authentication & Realtime
+    React->>Firebase: Authenticate User
+    Firebase-->>React: Auth Token / User State
+
+    %% Secure API Request
+    React->>API: HTTP Request + Firebase Token
+    API->>Firebase: Verify Token (Admin SDK)
+    Firebase-->>API: Token Valid
+
+    %% Business Data Flow
+    API->>MySql: Query / Update Structured Data
+    MySql-->>API: DB Response
+
+    %% Optional Payment Flow
     alt Payment Required
-        API->>Moyasar: Process Payment
+        API->>Moyasar: Create / Verify Payment
         Moyasar-->>API: Payment Result
     end
-    
+
+    %% Final Response
     API-->>React: JSON Response
     React-->>User: Update UI
+
+    %% Realtime Updates
+    Firebase-->>React: Realtime Sync / Notifications
 ```
