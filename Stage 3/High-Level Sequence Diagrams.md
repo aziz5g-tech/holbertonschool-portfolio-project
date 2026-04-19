@@ -1,3 +1,4 @@
+1️⃣ Use Case: Create Service Request (Elderly User Requests Assistance)
 
 sequenceDiagram
     participant User
@@ -27,7 +28,7 @@ sequenceDiagram
 
 
 
-
+2️⃣ Use Case: Accept Request & Share Companion Details
 
 
     sequenceDiagram
@@ -52,7 +53,7 @@ sequenceDiagram
     API-->>Frontend: Return companion contact details
     Frontend-->>Companion: Display request details
 
-
+3️⃣ Use Case: Real-Time Trip Tracking (Family Monitoring)
 
 
     sequenceDiagram
