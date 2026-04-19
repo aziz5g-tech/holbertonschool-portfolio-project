@@ -13,7 +13,7 @@ flowchart LR
 
     subgraph Data["Data Layer"]
         DB[(MySql<br/>Database)]
-        DB[(NoSql<br/>Firebase)]
+        DB2[(NoSql<br/>Firebase)]
     end
 
     subgraph External["External APIs"]
