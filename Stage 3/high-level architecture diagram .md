@@ -4,7 +4,7 @@
 ```mermaid
 flowchart LR
     subgraph Client["Client Layer"]
-        FE["Frontend<br/>(abc....)"]
+        FE["Frontend<br/>(React)"]
     end
 
     subgraph Server["Server Layer"]
