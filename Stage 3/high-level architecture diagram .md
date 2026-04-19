@@ -13,7 +13,8 @@ flowchart LR
 
     subgraph Data["Data Layer"]
         DB[(MySql<br/>Database)]
-        DB2[(NoSql<br/>Firebase)]
+        DB2[(NoSql<br/>Firebase Firestore)]
+        FS[(Firebase Storage)]
     end
 
     subgraph External["External APIs"]
@@ -26,15 +27,36 @@ flowchart LR
     %% Backend ↔ MySQL
     BE <-->|"CRUD Operations<br/>(Structured Data)"| DB
 
-    %% Backend ↔ Payment Gateway
-    BE <-->|"Payment Processing<br/>Create / Verify Transactions"| MOYASAR
+    %% Backend ↔ Firebase Firestore
+    BE <-->|"Admin SDK<br/>Validation / Background Jobs"| DB2
 
-    %% Client ↔ Firebase
+    %% Backend ↔ Firebase Storage
+    BE <-->|"Upload / Retrieve Files<br/>(Images, Documents)"| FS
+
+    %% Client ↔ Firebase Firestore
     FE <-->|"Realtime Sync<br/>Auth / Notifications"| DB2
 
-    %% Backend ↔ Firebase
-    BE <-->|"Admin SDK<br/>Validation / Background Jobs"| DB2
+    %% Client ↔ Firebase Storage (optional direct upload)
+    FE <-->|"File Uploads (optional)"| FS
+
+    %% Backend ↔ Payment Gateway
+    BE <-->|"Payment Processing<br/>Create / Verify Transactions"| MOYASAR
 ```
+
+## Architecture Overview
+
+The system is structured as a full-stack web platform with a clear separation between components:
+
+| Component | Technology | Description |
+|----------|------------|-------------|
+| Frontend | React | Single Page Application handling UI and real-time interactions |
+| Backend | Flask | REST API server handling business logic, authentication, and system operations |
+| Database (SQL) | MySQL | Relational database for structured and transactional data |
+| Database (NoSQL) | Firebase Firestore | NoSQL database used for real-time sync, notifications, and lightweight data |
+| File Storage | Firebase Storage | Cloud storage for images, documents, and user-uploaded files |
+| Authentication | Firebase Auth | Token-based authentication and session management |
+| Payment Gateway | Moyasar | Secure payment processing for Visa, MasterCard, and Mada |
+
 
 ### Data Flow
 
@@ -42,7 +64,9 @@ flowchart LR
 sequenceDiagram
     participant User
     participant React as React Frontend
-    participant Firebase
+    participant FirebaseAuth
+    participant FirebaseDB
+    participant FirebaseStorage
     participant API as Flask Backend
     participant MySql
     participant Moyasar as Moyasar API
@@ -50,29 +74,33 @@ sequenceDiagram
     %% User Interaction
     User->>React: Interact with UI
 
-    %% Authentication & Realtime
-    React->>Firebase: Authenticate User
-    Firebase-->>React: Auth Token / User State
+    %% Authentication
+    React->>FirebaseAuth: Login / Register
+    FirebaseAuth-->>React: Auth Token
 
     %% Secure API Request
     React->>API: HTTP Request + Firebase Token
-    API->>Firebase: Verify Token (Admin SDK)
-    Firebase-->>API: Token Valid
+    API->>FirebaseAuth: Verify Token
+    FirebaseAuth-->>API: Token Valid
 
-    %% Business Data Flow
+    %% File Upload Flow
+    React->>FirebaseStorage: Upload File (images/docs)
+    FirebaseStorage-->>React: File URL
+
+    %% Business Logic
     API->>MySql: Query / Update Structured Data
     MySql-->>API: DB Response
 
-    %% Optional Payment Flow
+    %% Payment Flow
     alt Payment Required
         API->>Moyasar: Create / Verify Payment
         Moyasar-->>API: Payment Result
     end
 
-    %% Final Response
+    %% Response
     API-->>React: JSON Response
     React-->>User: Update UI
 
     %% Realtime Updates
-    Firebase-->>React: Realtime Sync / Notifications
+    FirebaseDB-->>React: Realtime Sync / Notifications
 ```
