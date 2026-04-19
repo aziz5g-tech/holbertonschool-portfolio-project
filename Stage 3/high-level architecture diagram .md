@@ -20,9 +20,20 @@ flowchart LR
         MOYASAR["Payment API<br/>(Moyasar)"]
     end
 
+    %% Client ↔ Backend
     FE <-->|"HTTP Requests / JSON"| BE
-    BE <-->|"Queries / Responses"| DB
-    BE <-->|"Payment Processing"| MOYASAR
+
+    %% Backend ↔ MySQL
+    BE <-->|"CRUD Operations<br/>(Structured Data)"| DB
+
+    %% Backend ↔ Payment Gateway
+    BE <-->|"Payment Processing<br/>Create / Verify Transactions"| MOYASAR
+
+    %% Client ↔ Firebase
+    FE <-->|"Realtime Sync<br/>Auth / Notifications"| DB2
+
+    %% Backend ↔ Firebase
+    BE <-->|"Admin SDK<br/>Validation / Background Jobs"| DB2
 ```
 
 ### Data Flow
