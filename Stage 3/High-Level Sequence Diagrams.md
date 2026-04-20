@@ -59,7 +59,7 @@ sequenceDiagram
 ```
 
 ## Use Case: Real-Time Trip Tracking (Family Monitoring)
-
+ 
 ```mermaid
 
     sequenceDiagram
