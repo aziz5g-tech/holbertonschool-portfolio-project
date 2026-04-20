@@ -1,4 +1,5 @@
-1️⃣ Use Case: Create Service Request (Elderly User Requests Assistance)
+# High-Level Sequence Diagrams
+## Use Case: Create Service Request (Elderly User Requests Assistance)
 
 ```mermaid
 
@@ -30,7 +31,7 @@ sequenceDiagram
 ```
 
 
-2️⃣ Use Case: Accept Request & Share Companion Details
+## Use Case: Accept Request & Share Companion Details
 
 ```mermaid
 
@@ -57,7 +58,7 @@ sequenceDiagram
     Frontend-->>Companion: Display request details
 ```
 
-3️⃣ Use Case: Real-Time Trip Tracking (Family Monitoring)
+## Use Case: Real-Time Trip Tracking (Family Monitoring)
 
 ```mermaid
 
