@@ -45,18 +45,28 @@ flowchart LR
 
 ## Architecture Overview
 
-The system is structured as a full-stack web platform with a clear separation between components:
+The system is designed as a full-stack web platform following a three-layer architecture that ensures scalability, maintainability, and clear separation of concerns.
+
+The architecture consists of a client layer for user interaction, a server layer for business logic and system operations, and a data layer for data persistence and real-time services.
+
+### System Components
 
 | Component | Technology | Description |
 |----------|------------|-------------|
-| Frontend | React | Single Page Application handling UI and real-time interactions |
-| Backend | Flask | REST API server handling business logic, authentication, and system operations |
-| Database (SQL) | MySQL | Relational database for structured and transactional data |
-| Database (NoSQL) | Firestore | NoSQL database used for real-time sync, notifications, and lightweight data |
-| File Storage | Firebase Storage | Cloud storage for images, documents, and user-uploaded files |
-| Authentication | Firebase Auth | Token-based authentication and session management |
+| Frontend | React | Single Page Application (SPA) responsible for rendering the user interface and handling user interactions |
+| Backend | Node.js (Express.js) | RESTful API server responsible for business logic, request validation, authentication, and integrations |
+| Database (SQL) | MySQL | Relational database used for structured and transactional data |
+| Database (NoSQL) | Firebase Firestore | NoSQL database used for real-time synchronization, notifications, and lightweight data |
+| File Storage | Firebase Storage | Cloud-based storage for images, documents, and user-uploaded files |
+| Authentication | Firebase Authentication | Secure token-based authentication and session management |
 | Payment Gateway | Moyasar | Secure payment processing for Visa, MasterCard, and Mada |
 
+### Architectural Principles
+
+- **Separation of Concerns:** Each layer is responsible for a specific set of tasks, reducing coupling between components.
+- **Scalability:** The backend and data layers can scale independently based on system load.
+- **Security:** Authentication is handled using Firebase Authentication with token verification on the backend.
+- **Extensibility:** The architecture allows for easy integration of additional services and features in future phases.
 
 ### Data Flow
 
