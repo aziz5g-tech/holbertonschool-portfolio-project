@@ -8,7 +8,7 @@ flowchart LR
     end
 
     subgraph Server["Server Layer"]
-        BE["Backend<br/>(FLASK)"]
+        BE["Backend<br/>(Node.js)"]
     end
 
     subgraph Data["Data Layer"]
