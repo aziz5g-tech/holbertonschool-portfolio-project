@@ -8,12 +8,12 @@ flowchart LR
     end
 
     subgraph Server["Server Layer"]
-        BE["Backend<br/>(FLASK)"]
+        BE["Backend<br/>(Node.js + Express)"]
     end
 
     subgraph Data["Data Layer"]
-        DB[(MySql<br/>Database)]
-        DB2[(NoSql<br/>Firebase Firestore)]
+        DB[(MySQL<br/>Database)]
+        DB2[(NoSQL<br/>Firebase Firestore)]
         FS[(Firebase Storage)]
     end
 
