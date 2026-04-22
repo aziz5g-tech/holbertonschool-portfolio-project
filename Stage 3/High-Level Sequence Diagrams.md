@@ -1,21 +1,21 @@
 # High-Level Sequence Diagrams
-## Use Case: Create Service Request (Elderly User Requests Assistance)
+
+## Use Case: Create Service Request (Service Seeker Requests Assistance)
 
 ```mermaid
-
 sequenceDiagram
-    participant User
+    participant User as Service Seeker
     participant Frontend as React Frontend
-    participant API as Flask Backend
+    participant API as Node.js Backend
     participant FirebaseAuth
     participant MySQL
-    participant Firebase as Firebase (Realtime/Notifications)
+    participant Firebase as Firebase (Realtime / Notifications)
 
     User->>Frontend: Fill service request form
     Frontend->>FirebaseAuth: Verify user token
     FirebaseAuth-->>Frontend: Token valid
 
-    Frontend->>API: POST /create-request (data + token)
+    Frontend->>API: POST /requests (data + token)
     API->>FirebaseAuth: Verify token
     FirebaseAuth-->>API: User authenticated
 
@@ -38,24 +38,24 @@ sequenceDiagram
     sequenceDiagram
     participant Companion
     participant Frontend as React Frontend
-    participant API as Flask Backend
+    participant API as Node.js Backend
     participant MySQL
-    participant Firebase
+    participant Firebase as Firebase (Realtime / Notifications)
 
     Companion->>Frontend: Accept service request
-    Frontend->>API: POST /accept-request
+    Frontend->>API: POST /requests/{id}/accept
 
     API->>MySQL: Update request status = accepted
-    MySQL-->>API: Updated
+    MySQL-->>API: Status updated
 
-    API->>MySQL: Fetch companion profile + contact info
-    MySQL-->>API: Companion details
+    API->>MySQL: Fetch companion profile & contact details
+    MySQL-->>API: Companion data
 
-    API->>Firebase: Notify user (request accepted)
+    API->>Firebase: Notify service seeker & elderly user
     Firebase-->>Frontend: Real-time notification
 
-    API-->>Frontend: Return companion contact details
-    Frontend-->>Companion: Display request details
+    API-->>Frontend: Return confirmation & details
+    Frontend-->>Companion: Display request information
 ```
 
 ## Use Case: Real-Time Trip Tracking (Family Monitoring)
@@ -65,17 +65,17 @@ sequenceDiagram
     sequenceDiagram
     participant Companion
     participant Frontend as React App
-    participant API as Flask Backend
-    participant FirebaseDB as Firebase Realtime DB
-    participant Family
+    participant API as Node.js Backend
+    participant FirebaseDB as Firebase Firestore
+    participant Family as Service Seeker
 
-    Companion->>Frontend: Update location / trip status
+    Companion->>Frontend: Update trip status / location
     Frontend->>FirebaseDB: Send live location update
 
     FirebaseDB-->>Family: Real-time location update
 
-    API->>FirebaseDB: Sync trip status (in_progress/completed)
-    FirebaseDB-->>Family: Notify status change
+    API->>FirebaseDB: Sync trip status (on_the_way / in_progress / completed)
+    FirebaseDB-->>Family: Status notification
 
     Family-->>Family: View live tracking on map
 ```
