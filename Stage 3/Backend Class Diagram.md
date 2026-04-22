@@ -1,6 +1,10 @@
 ```mermaid
 classDiagram
 
+%% =====================
+%% Controllers Layer
+%% =====================
+
 class UserController {
   +register()
   +login()
@@ -8,7 +12,7 @@ class UserController {
   +updateProfile()
 }
 
-class RequestController {
+class ServiceRequestController {
   +createRequest()
   +getRequestById()
   +getUserRequests()
@@ -17,26 +21,18 @@ class RequestController {
 }
 
 class CompanionController {
-  +getCompanionProfile()
+  +getProfile()
   +getAvailableCompanions()
-  +assignCompanion()
+  +acceptRequest()
   +rateCompanion()
-}
-
-class FamilyController {
-  +subscribeToUser()
-  +getLiveTripUpdates()
-  +receiveNotifications()
 }
 
 class MapController {
   +setDestination()
-  +getRoute()
 }
 
 class ContentController {
   +getEducationalContent()
-  +listArticles()
 }
 
 class FavoriteController {
@@ -45,11 +41,9 @@ class FavoriteController {
   +getFavorites()
 }
 
-class NotificationService {
-  +sendRealTimeUpdate()
-  +notifyFamily()
-  +notifyUser()
-}
+%% =====================
+%% Services Layer
+%% =====================
 
 class AuthService {
   +verifyToken()
@@ -58,14 +52,20 @@ class AuthService {
 
 class RequestService {
   +createServiceRequest()
-  +assignCompanionLogic()
+  +assignCompanion()
   +updateStatus()
 }
 
 class CompanionService {
   +fetchProfile()
-  +rateUser()
+  +setAvailability()
   +rateCompanion()
+}
+
+class NotificationService {
+  +sendRealtimeUpdate()
+  +notifyServiceSeeker()
+  +notifyElderlyUser()
 }
 
 class UserService {
@@ -74,6 +74,10 @@ class UserService {
   +fetchUser()
 }
 
+%% =====================
+%% Data Layer
+%% =====================
+
 class MySQLRepository {
   +insert()
   +update()
@@ -81,23 +85,32 @@ class MySQLRepository {
   +delete()
 }
 
-class FirebaseService {
+class FirebaseAuthService {
+  +verifyToken()
+}
+
+class FirebaseRealtimeService {
   +sendRealtimeUpdate()
   +storeNotification()
 }
 
+%% =====================
+%% Relationships
+%% =====================
+
 UserController --> AuthService
-RequestController --> RequestService
+UserController --> UserService
+
+ServiceRequestController --> RequestService
 CompanionController --> CompanionService
-FamilyController --> NotificationService
 MapController --> RequestService
-ContentController --> MySQLRepository
 FavoriteController --> MySQLRepository
+ContentController --> MySQLRepository
 
 RequestService --> MySQLRepository
 UserService --> MySQLRepository
 CompanionService --> MySQLRepository
 
-NotificationService --> FirebaseService
-AuthService --> FirebaseService
+AuthService --> FirebaseAuthService
+NotificationService --> FirebaseRealtimeService
 ```
