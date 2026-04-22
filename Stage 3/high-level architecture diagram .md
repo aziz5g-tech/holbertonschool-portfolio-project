@@ -65,9 +65,9 @@ sequenceDiagram
     participant User
     participant React as React Frontend
     participant FirebaseAuth
-    participant FirebaseDB
+    participant FirebaseDB as Firestore
     participant FirebaseStorage
-    participant API as Flask Backend
+    participant API as Node.js Backend
     participant MySql
     participant Moyasar as Moyasar API
 
@@ -76,7 +76,7 @@ sequenceDiagram
 
     %% Authentication
     React->>FirebaseAuth: Login / Register
-    FirebaseAuth-->>React: Auth Token
+    FirebaseAuth-->>React: Auth Token (JWT)
 
     %% Secure API Request
     React->>API: HTTP Request + Firebase Token
@@ -84,12 +84,12 @@ sequenceDiagram
     FirebaseAuth-->>API: Token Valid
 
     %% File Upload Flow
-    React->>FirebaseStorage: Upload File (images/docs)
+    React->>FirebaseStorage: Upload File (images / documents)
     FirebaseStorage-->>React: File URL
 
     %% Business Logic
     API->>MySql: Query / Update Structured Data
-    MySql-->>API: DB Response
+    MySql-->>API: Database Response
 
     %% Payment Flow
     alt Payment Required
