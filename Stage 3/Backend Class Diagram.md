@@ -1,5 +1,5 @@
-# Back-end Components (Classes) : 
-
+# *Define Components, Classes, and Database Design*
+## Back-end Components (Classes) : 
 ## User (Base Entity):
 **Attributes:**
   - id: int (PK)
