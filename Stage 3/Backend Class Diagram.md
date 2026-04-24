@@ -120,64 +120,106 @@ NotificationService --> FirebaseRealtimeService
 # Back-end Components (Classes) : 
 
 ## User (Base Entity):
-### Attributes:
-- id: int (PK)
-- password: string
-- name: string
-- email: string
-- mobileNumber: string
-- birthdate: date
-- city: string
-- district: string
-- rating: float
-- role: enum('seeker', 'provider', 'admin')
-- createdAt: datetime
+**Attributes:**
+  - id: int (PK)
+  - password: string
+  - name: string
+  - email: string
+  - mobileNumber: string
+  - birthdate: date
+  - city: string
+  - district: string
+  - role: enum('seeker', 'provider', 'admin')
+  - createdAt: datetime
+**Methods:**
+  - register()
+  - login()
+  - updateProfile()
 
 ## UserLanguages:
-### Attributes:
-- id: int (PK)
-- user_id: int (FK → User.id)
-- language: string
+**Attributes:**
+  - id: int (PK)
+  - user_id: int (FK → User.id)
+  - language: string
+**Methods:**
+  - addLanguage()
+  - deleteLanguage()
+  - getUserLanguages()
 
 ## UserFiles
-### Attributes:
-- id: int (PK)
-- user_id: int (FK → User.id)
-- file_url: string
-- file_type: enum('id_card', 'certification', 'profile_picture')
-- created_at: datetime
+**Attributes:**
+  - id: int (PK)
+  - user_id: int (FK → User.id)
+  - file_url: string
+  - file_type: enum('id_card', 'certification', 'profile_picture')
+  - created_at: datetime
+**Methods:**
+  - uploadFile()
+  - deleteFile()
+  - getUserFiles()
 
 ## Provider (Profile):
-### Attributes:
-- user_id: int (FK → User.id)
-- experience: boolean
-- bio: string
-- hasCar: boolean
-- carType: string
-- iban: string
-- isHealthy: boolean
+**Attributes:**
+  - user_id: int (FK → User.id)
+  - experience: boolean
+  - bio: string
+  - hasCar: boolean
+  - carType: string
+  - iban: string
+  - isHealthy: boolean
+**Methods:**
+  - updateAvailability()
+  - deleteService()
+  - submitOffer(requestId)
 
 ## providerServices
-### Attributes:
-- id: int (PK)
-- provider_id: int (FK → Provider.user_id)
-- serviceName: string
-
+**Attributes:**
+  - id: int (PK)
+  - provider_id: int (FK → Provider.user_id)
+  - serviceName: string
+**Methods:**
+  - addService()
+  - deleteService()
+  - getProviderServices(providerId)
+  
 ## ProviderAvailability
-### Attributes:
-- id: int (PK)
-- provider_id: int (FK → Provider.user_id)
-- day: string
-- time_from: time
-- time_to: time
-
+**Attributes:**
+  - id: int (PK)
+  - provider_id: int (FK → Provider.user_id)
+  - day: string
+  - time_from: time
+  - time_to: time
+**Methods:**
+  - setAvailability()
+  - deleteAvailability()
+  - updateAvailability()
+  - getAvailability(providerId)
+  
 ## Seeker (Profile):
-### Attributes:
-- user_id: int (FK → User.id)
-- emergencyNumber: string
-- notes: string
-- requiresWheelchair: boolean
-- preferredGender: enum('male', 'female', 'any')
-
-
+**Attributes:**
+  - user_id: int  (FK → User.id)
+  - emergencyNumber: string
+  - notes: string
+  - requiresWheelchair: boolean
+  - preferredGender: enum('male', 'female', 'any')
+**Methods:**
+  - createRequest()
+  - cancelRequest()
+  - viewOffers(requestId)
+  - acceptOffer(offerId)
+  - rejectOffer(offerId)
+  
+## Rating :
+**Attributes:**
+  - id: int
+  - user_id: int  (FK → User.id)
+  - target_id: int (FK → User.id)
+  - rating: int (1–5)
+  - comment: String
+  - created_at: Datetime
+**Methods:**
+  - submitRating()
+  - getUserRatings(userId)
+  - deleteRating()
+  - updateRating()
 
