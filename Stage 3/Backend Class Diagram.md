@@ -130,7 +130,7 @@ NotificationService --> FirebaseRealtimeService
 - Languages: List<String>
 - Rating
 - role (Provider, Seeker)
-<br>
+
 ## Provider:
 # Attributes:
 - User.id: int (FK)
