@@ -131,6 +131,7 @@ NotificationService --> FirebaseRealtimeService
   - district: string
   - role: enum('seeker', 'provider', 'admin')
   - createdAt: datetime<br>
+
 **Methods:**
   - register()
   - login()
@@ -141,6 +142,7 @@ NotificationService --> FirebaseRealtimeService
   - id: int (PK)
   - user_id: int (FK → User.id)
   - language: string<br>
+
 **Methods:**
   - addLanguage()
   - deleteLanguage()
