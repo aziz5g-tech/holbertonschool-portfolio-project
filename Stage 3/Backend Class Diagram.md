@@ -130,7 +130,7 @@ NotificationService --> FirebaseRealtimeService
   - city: string
   - district: string
   - role: enum('seeker', 'provider', 'admin')
-  - createdAt: datetime <br>
+  - createdAt: datetime<br>
 **Methods:**
   - register()
   - login()
@@ -140,7 +140,7 @@ NotificationService --> FirebaseRealtimeService
 **Attributes:**
   - id: int (PK)
   - user_id: int (FK → User.id)
-  - language: string <br>
+  - language: string<br>
 **Methods:**
   - addLanguage()
   - deleteLanguage()
@@ -152,7 +152,7 @@ NotificationService --> FirebaseRealtimeService
   - user_id: int (FK → User.id)
   - file_url: string
   - file_type: enum('id_card', 'certification', 'profile_picture')
-  - created_at: datetime <br>
+  - created_at: datetime<br>
 **Methods:**
   - uploadFile()
   - deleteFile()
@@ -166,7 +166,7 @@ NotificationService --> FirebaseRealtimeService
   - hasCar: boolean
   - carType: string
   - iban: string
-  - isHealthy: boolean <br>
+  - isHealthy: boolean<br>
 **Methods:**
   - updateAvailability()
   - deleteService()
@@ -176,7 +176,7 @@ NotificationService --> FirebaseRealtimeService
 **Attributes:**
   - id: int (PK)
   - provider_id: int (FK → Provider.user_id)
-  - serviceName: string <br>
+  - serviceName: string<br>
 **Methods:**
   - addService()
   - deleteService()
@@ -188,7 +188,7 @@ NotificationService --> FirebaseRealtimeService
   - provider_id: int (FK → Provider.user_id)
   - day: string
   - time_from: time
-  - time_to: time <br>
+  - time_to: time<br>
 **Methods:**
   - setAvailability()
   - deleteAvailability()
@@ -201,7 +201,7 @@ NotificationService --> FirebaseRealtimeService
   - emergencyNumber: string
   - notes: string
   - requiresWheelchair: boolean
-  - preferredGender: enum('male', 'female', 'any') <br>
+  - preferredGender: enum('male', 'female', 'any')<br>
 **Methods:**
   - createRequest()
   - cancelRequest()
@@ -216,10 +216,25 @@ NotificationService --> FirebaseRealtimeService
   - target_id: int (FK → User.id)
   - rating: int (1–5)
   - comment: String
-  - created_at: Datetime <br>
+  - created_at: Datetime<br>
 **Methods:**
   - submitRating()
   - getUserRatings(userId)
   - deleteRating()
   - updateRating()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
