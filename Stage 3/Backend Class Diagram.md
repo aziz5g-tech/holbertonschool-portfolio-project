@@ -117,42 +117,67 @@ NotificationService --> FirebaseRealtimeService
 
 ###
 
-### Back-end Components (Classes) :
+# Back-end Components (Classes) : 
+
 ## User:
-# Attributes:
-- id: int
-- name: String
-- Email: String
-- MobileNumber: int
-- Birthdate: Date
-- City: String
-- District: String
-- Languages: List<String>
-- Rating
-- role (Provider, Seeker)
+### Attributes:
+- id: int (PK)
+- password: string
+- name: string
+- email: string
+- mobileNumber: string
+- birthdate: date
+- city: string
+- district: string
+- rating: float
+- role: enum('seeker', 'provider', 'admin')
+- createdAt: datetime
+
+## userLanguages:
+### Attributes:
+- id: int (PK)
+- user_id: int (FK → User.id)
+- language: string
+
+## user_files:
+### Attributes:
+- id: int (PK)
+- user_id: int (FK → User.id)
+- file_url: string
+- file_type: enum('id_card', 'certification', 'profile_picture')
+- created_at: datetime
 
 ## Provider:
-# Attributes:
-- User.id: int (FK)
-- Services: List<String>
-- OfferDays: List<DAY>
-- OfferTime: List<Time>
-- Experinces: Boolean
-- Bio: String
-- HaveCar: Boolean
-- Car: String
-- Storage: Links >>>>>>>>>>>>>>>>> ?? الملفات تنرفع وهنا ينحط رابط لها كيف تنكتب ؟
-- Picture: نفس الشي
-- Certifications: same
-- IBAN: int
-- Health: Boolean
+### Attributes:
+- user_id: int (FK → User.id)
+- experience: boolean
+- bio: string
+- hasCar: boolean
+- carType: string
+- iban: string
+- isHealthy: boolean
 
-## Seeker:  >>>>>> ?????????? وش الخاص فيه ؟
-# Attributes:
-- User.id: int (FK)
-- EmergencyNumber: int
-- ExtraInformation: String
+## providerServices
+### Attributes:
+- id: int (PK)
+- provider_id: int (FK → Provider.user_id)
+- serviceName: string
 
-## Admin:
-- id: int
-- 
+## provider_availability
+### Attributes:
+- id: int (PK)
+- provider_id: int (FK → Provider.user_id)
+- day: string
+- time_from: time
+- time_to: time
+
+## Seeker:
+### Attributes:
+- user_id: int (FK → User.id)
+- emergencyNumber: string
+- notes: string
+- requiresWheelchair: boolean
+- preferredGender: enum('male', 'female', 'any')
+
+
+
