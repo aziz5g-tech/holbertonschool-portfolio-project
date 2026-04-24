@@ -119,7 +119,7 @@ NotificationService --> FirebaseRealtimeService
 
 # Back-end Components (Classes) : 
 
-## User:
+## User (Base Entity):
 ### Attributes:
 - id: int (PK)
 - password: string
@@ -133,13 +133,13 @@ NotificationService --> FirebaseRealtimeService
 - role: enum('seeker', 'provider', 'admin')
 - createdAt: datetime
 
-## userLanguages:
+## UserLanguages:
 ### Attributes:
 - id: int (PK)
 - user_id: int (FK → User.id)
 - language: string
 
-## user_files:
+## UserFiles
 ### Attributes:
 - id: int (PK)
 - user_id: int (FK → User.id)
@@ -147,7 +147,7 @@ NotificationService --> FirebaseRealtimeService
 - file_type: enum('id_card', 'certification', 'profile_picture')
 - created_at: datetime
 
-## Provider:
+## Provider (Profile):
 ### Attributes:
 - user_id: int (FK → User.id)
 - experience: boolean
@@ -163,7 +163,7 @@ NotificationService --> FirebaseRealtimeService
 - provider_id: int (FK → Provider.user_id)
 - serviceName: string
 
-## provider_availability
+## ProviderAvailability
 ### Attributes:
 - id: int (PK)
 - provider_id: int (FK → Provider.user_id)
@@ -171,7 +171,7 @@ NotificationService --> FirebaseRealtimeService
 - time_from: time
 - time_to: time
 
-## Seeker:
+## Seeker (Profile):
 ### Attributes:
 - user_id: int (FK → User.id)
 - emergencyNumber: string
