@@ -1,122 +1,3 @@
-```mermaid
-classDiagram
-
-%% =====================
-%% Controllers Layer
-%% =====================
-
-class UserController {
-  +register()
-  +login()
-  +getProfile()
-  +updateProfile()
-}
-
-class ServiceRequestController {
-  +createRequest()
-  +getRequestById()
-  +getUserRequests()
-  +updateRequestStatus()
-  +cancelRequest()
-}
-
-class CompanionController {
-  +getProfile()
-  +getAvailableCompanions()
-  +acceptRequest()
-  +rateCompanion()
-}
-
-class MapController {
-  +setDestination()
-}
-
-class ContentController {
-  +getEducationalContent()
-}
-
-class FavoriteController {
-  +addFavorite()
-  +removeFavorite()
-  +getFavorites()
-}
-
-%% =====================
-%% Services Layer
-%% =====================
-
-class AuthService {
-  +verifyToken()
-  +getUserFromToken()
-}
-
-class RequestService {
-  +createServiceRequest()
-  +assignCompanion()
-  +updateStatus()
-}
-
-class CompanionService {
-  +fetchProfile()
-  +setAvailability()
-  +rateCompanion()
-}
-
-class NotificationService {
-  +sendRealtimeUpdate()
-  +notifyServiceSeeker()
-  +notifyElderlyUser()
-}
-
-class UserService {
-  +createUser()
-  +updateUser()
-  +fetchUser()
-}
-
-%% =====================
-%% Data Layer
-%% =====================
-
-class MySQLRepository {
-  +insert()
-  +update()
-  +find()
-  +delete()
-}
-
-class FirebaseAuthService {
-  +verifyToken()
-}
-
-class FirebaseRealtimeService {
-  +sendRealtimeUpdate()
-  +storeNotification()
-}
-
-%% =====================
-%% Relationships
-%% =====================
-
-UserController --> AuthService
-UserController --> UserService
-
-ServiceRequestController --> RequestService
-CompanionController --> CompanionService
-MapController --> RequestService
-FavoriteController --> MySQLRepository
-ContentController --> MySQLRepository
-
-RequestService --> MySQLRepository
-UserService --> MySQLRepository
-CompanionService --> MySQLRepository
-
-AuthService --> FirebaseAuthService
-NotificationService --> FirebaseRealtimeService
-```
-
-###
-
 # Back-end Components (Classes) : 
 
 ## User (Base Entity):
@@ -155,6 +36,7 @@ NotificationService --> FirebaseRealtimeService
   - file_url: string
   - file_type: enum('id_card', 'certification', 'profile_picture')
   - created_at: datetime<br>
+
 **Methods:**
   - uploadFile()
   - deleteFile()
@@ -169,6 +51,7 @@ NotificationService --> FirebaseRealtimeService
   - carType: string
   - iban: string
   - isHealthy: boolean<br>
+
 **Methods:**
   - updateAvailability()
   - deleteService()
@@ -179,6 +62,7 @@ NotificationService --> FirebaseRealtimeService
   - id: int (PK)
   - provider_id: int (FK → Provider.user_id)
   - serviceName: string<br>
+
 **Methods:**
   - addService()
   - deleteService()
@@ -191,6 +75,7 @@ NotificationService --> FirebaseRealtimeService
   - day: string
   - time_from: time
   - time_to: time<br>
+
 **Methods:**
   - setAvailability()
   - deleteAvailability()
@@ -202,8 +87,10 @@ NotificationService --> FirebaseRealtimeService
   - user_id: int  (FK → User.id)
   - emergencyNumber: string
   - notes: string
+  - healthStatus: String
   - requiresWheelchair: boolean
   - preferredGender: enum('male', 'female', 'any')<br>
+
 **Methods:**
   - createRequest()
   - cancelRequest()
@@ -219,6 +106,7 @@ NotificationService --> FirebaseRealtimeService
   - rating: int (1–5)
   - comment: String
   - created_at: Datetime<br>
+
 **Methods:**
   - submitRating()
   - getUserRatings(userId)
