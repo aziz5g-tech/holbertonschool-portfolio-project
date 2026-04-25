@@ -68,12 +68,14 @@ The architecture consists of a client layer for user interaction, a server layer
 | Database (SQL) | MySQL | Relational database used for structured and transactional data |
 | Database (NoSQL) | Firebase Firestore | NoSQL database used for real-time synchronization, notifications, and lightweight data |
 | File Storage | Firebase Storage | Cloud-based storage for images, documents, and user-uploaded files |
-| Authentication | Firebase Authentication | Secure token-based authentication and session management |
+| Authentication (Primary) | JWT (Backend) + OTP (MySQL) | Primary authentication and session/token validation handled by backend APIs |
+| Authentication (Secondary) | Firebase Authentication | Secondary/optional authentication provider, not the core authentication path |
 | Payment Gateway | Moyasar | Secure payment processing for Visa, MasterCard, and Mada |
+| Maps Service | Google Maps API | Map rendering, location selection, geocoding, and route/location utilities |
 
 ### Architectural Principles
 
 - **Separation of Concerns:** Each layer is responsible for a specific set of tasks, reducing coupling between components.
 - **Scalability:** The backend and data layers can scale independently based on system load.
-- **Security:** Authentication is handled using Firebase Authentication with token verification on the backend.
+- **Security:** Primary authentication is handled by backend JWT + OTP verification; Firebase Authentication is optional/secondary.
 - **Extensibility:** The architecture allows for easy integration of additional services and features in future phases.
