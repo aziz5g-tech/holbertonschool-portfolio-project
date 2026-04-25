@@ -770,80 +770,92 @@ Optional fields: `attachment_url`, `is_read`
 
 # High-Level Sequence Diagrams
 
-## Use Case: Create Service Request (Service Seeker Requests Assistance)
-
+## Use Case 1: Create Service Request and Pay Before Submission
 ```mermaid
 sequenceDiagram
-	participant User as Service Seeker
-	participant Frontend as React Frontend
-	participant API as Node.js Backend
-	participant FirebaseAuth
-	participant MySQL
-	participant Firebase as Firebase (Realtime / Notifications)
+    participant User as Service Seeker
+    participant Frontend as React Frontend
+    participant Backend as Node.js Backend
+    participant MySQL
+    participant Moyasar as Payment Gateway
+    participant Firebase as Firebase Realtime
 
-	User->>Frontend: Fill service request form
-	Frontend->>FirebaseAuth: Verify user token
-	FirebaseAuth-->>Frontend: Token valid
+    User->>Frontend: Fill request form
+    Frontend->>Backend: POST /api/v1/requests (JSON + JWT)
+    Backend->>MySQL: Validate user, request data, beneficiary, health data, location
+    MySQL-->>Backend: Validation result
 
-	Frontend->>API: POST /requests (data + token)
-	API->>FirebaseAuth: Verify token
-	FirebaseAuth-->>API: User authenticated
+    Backend->>Moyasar: Create payment charge
+    Moyasar-->>Backend: Payment session / transaction info
+    Backend-->>Frontend: Payment checkout data
 
-	API->>MySQL: Save service request
-	MySQL-->>API: Request created
-
-	API->>Firebase: Send notification (new request created)
-	Firebase-->>Frontend: Real-time update
-
-	API-->>Frontend: Request confirmation
-	Frontend-->>User: Show success message
+    User->>Frontend: Complete payment
+    Frontend->>Moyasar: Submit payment
+    Moyasar-->>Backend: Webhook payment confirmation
+    Backend->>MySQL: Save payment as paid
+    Backend->>MySQL: Save request as pending companion response
+    Backend->>Firebase: Send realtime notification
+    Firebase-->>Frontend: Request status update
+    Backend-->>Frontend: Request created successfully
 ```
 
-## Use Case: Accept Request & Share Companion Details
-
+## Use Case 2: Companion Accepts or Rejects the Request
 ```mermaid
 sequenceDiagram
-	participant Companion
-	participant Frontend as React Frontend
-	participant API as Node.js Backend
-	participant MySQL
-	participant Firebase as Firebase (Realtime / Notifications)
+    participant Companion as Companion
+    participant Frontend as React Frontend
+    participant Backend as Node.js Backend
+    participant MySQL
+    participant Firebase as Firebase Realtime
+    participant Moyasar as Payment Gateway
 
-	Companion->>Frontend: Accept service request
-	Frontend->>API: POST /requests/{id}/accept
+    Companion->>Frontend: Open pending request
+    Frontend->>Backend: POST /api/v1/requests/{id}/accept-or-reject (JSON + JWT)
+    Backend->>MySQL: Verify companion approval, request status, and availability
+    MySQL-->>Backend: Verification result
 
-	API->>MySQL: Update request status = accepted
-	MySQL-->>API: Status updated
-
-	API->>MySQL: Fetch companion profile & contact details
-	MySQL-->>API: Companion data
-
-	API->>Firebase: Notify service seeker & elderly user
-	Firebase-->>Frontend: Real-time notification
-
-	API-->>Frontend: Return confirmation & details
-	Frontend-->>Companion: Display request information
+    alt Companion accepts
+        Backend->>MySQL: Update request status = accepted
+        Backend->>MySQL: Create trip session
+        Backend->>Firebase: Create chat / notify user / start tracking session
+        Firebase-->>Frontend: Realtime acceptance update
+        Backend-->>Frontend: Acceptance confirmed
+    else Companion rejects
+        Backend->>MySQL: Update request status = rejected
+        Backend->>Moyasar: Trigger refund
+        Moyasar-->>Backend: Refund confirmation
+        Backend->>MySQL: Save refund record
+        Backend->>Firebase: Notify user of rejection and refund status
+        Firebase-->>Frontend: Realtime rejection update
+        Backend-->>Frontend: Rejection confirmed
+    end
 ```
 
-## Use Case: Real-Time Trip Tracking (Family Monitoring)
-
+## Use Case 3: Real-Time Trip Tracking and Trip Completion
 ```mermaid
 sequenceDiagram
-	participant Companion
-	participant Frontend as React App
-	participant API as Node.js Backend
-	participant FirebaseDB as Firebase Firestore
-	participant Family as Service Seeker
+    participant Companion as Companion
+    participant Frontend as React Frontend
+    participant Backend as Node.js Backend
+    participant Firebase as Firebase Realtime
+    participant MySQL
+    participant User as Service Seeker
 
-	Companion->>Frontend: Update trip status / location
-	Frontend->>FirebaseDB: Send live location update
+    Companion->>Frontend: Share live location
+    Frontend->>Firebase: Write trip_live_tracking update
+    Firebase-->>User: Live location update on map
 
-	FirebaseDB-->>Family: Real-time location update
+    Backend->>MySQL: Update trip session status
+    MySQL-->>Backend: Status saved
+    Backend->>Firebase: Send notification and presence update
+    Firebase-->>Frontend: Realtime trip status update
 
-	API->>FirebaseDB: Sync trip status (on_the_way / in_progress / completed)
-	FirebaseDB-->>Family: Status notification
-
-	Family-->>Family: View live tracking on map
+    Companion->>Frontend: End trip
+    Frontend->>Backend: POST /api/v1/trips/{request_id}/end (JSON + JWT)
+    Backend->>MySQL: Close trip session and request status
+    Backend->>Firebase: Notify user trip completed
+    Firebase-->>User: Trip completed notification
+    Backend-->>Frontend: Trip end confirmation
 ```
 
 ---
