@@ -4,7 +4,7 @@ Rafeeq is an MVP care-coordination platform built with a role-based architecture
 
 ---
 
-## Folder 0 — Define User Stories and Mockups
+## User Stories and Mockups
 
 ### 0.1 User Stories
 
@@ -74,7 +74,7 @@ Rafeeq is an MVP care-coordination platform built with a role-based architecture
 
 ---
 
-## Folder 1 — Design System Architecture
+## Design System Architecture
 
 # MVP System Architecture
 ## High-Level Package Diagram (Three-Layer Architecture)
@@ -148,7 +148,7 @@ The architecture consists of a client layer for user interaction, a server layer
 
 ---
 
-## Folder 2 — Define Components, Classes, and Database Design
+## Define Components, Classes, and Database Design
 
 ### 2.1 UI Components and Interactions
 
@@ -762,7 +762,7 @@ Optional fields: `attachment_url`, `is_read`
 
 ---
 
-## Folder 3 — Create High-Level Sequence Diagrams
+## High-Level Sequence Diagrams
 
 ## Use Case: Create Service Request (Service Seeker Requests Assistance)
 
@@ -842,7 +842,7 @@ sequenceDiagram
 
 ---
 
-## Folder 4 — Document External and Internal APIs
+## External and Internal APIs
 
 ## External APIs
 
@@ -1088,7 +1088,7 @@ sequenceDiagram
 
 ---
 
-## Folder 5 — Plan SCM and QA Strategies
+## Plan SCM and QA Strategies
 
 ## Purpose
 To establish practical procedures for managing code, the development lifecycle, and ensuring quality.
