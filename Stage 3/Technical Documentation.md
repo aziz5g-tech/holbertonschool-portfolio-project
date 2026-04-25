@@ -76,10 +76,6 @@ Rafeeq is an MVP care-coordination platform built with a role-based architecture
 
 # Design System Architecture
 
-## High-Level Package Diagram (Three-Layer Architecture)
-
-# High-Level Architecture Diagram
-
 ```mermaid
 flowchart LR
     subgraph Client["Client Layer"]
