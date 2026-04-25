@@ -4,7 +4,7 @@ Rafeeq is an MVP care-coordination platform built with a role-based architecture
 
 ---
 
-## User Stories and Mockups
+# User Stories and Mockups
 
 ### 0.1 User Stories
 
@@ -74,9 +74,8 @@ Rafeeq is an MVP care-coordination platform built with a role-based architecture
 
 ---
 
-## Design System Architecture
+# Design System Architecture
 
-# MVP System Architecture
 ## High-Level Package Diagram (Three-Layer Architecture)
 
 ```mermaid
@@ -148,7 +147,7 @@ The architecture consists of a client layer for user interaction, a server layer
 
 ---
 
-## Define Components, Classes, and Database Design
+# Define Components, Classes, and Database Design
 
 ### 2.1 UI Components and Interactions
 
@@ -762,7 +761,7 @@ Optional fields: `attachment_url`, `is_read`
 
 ---
 
-## High-Level Sequence Diagrams
+# High-Level Sequence Diagrams
 
 ## Use Case: Create Service Request (Service Seeker Requests Assistance)
 
@@ -842,7 +841,7 @@ sequenceDiagram
 
 ---
 
-## External and Internal APIs
+# External and Internal APIs
 
 ## External APIs
 
@@ -1088,7 +1087,7 @@ sequenceDiagram
 
 ---
 
-## Plan SCM and QA Strategies
+# Plan SCM and QA Strategies
 
 ## Purpose
 To establish practical procedures for managing code, the development lifecycle, and ensuring quality.
@@ -1188,3 +1187,17 @@ To establish practical procedures for managing code, the development lifecycle, 
 - Tools: `Jest`, `Postman`.
 - Tests: unit tests, integration tests, manual critical-flow tests.
 - Deployment quality gates for staging and production.
+
+# Technical Justifications
+
+### Rationales for Chosen Technologies and Designs
+- `React` was chosen for a responsive role-based frontend.
+- `Node.js` and `Express` were chosen for a lightweight REST API backend.
+- `MySQL` was chosen for structured transactional data and relational integrity.
+- `Firebase Firestore` was chosen for real-time chat, tracking, and notifications.
+- `Firebase Storage` was chosen for secure file and document uploads.
+- `Firebase Authentication` was chosen as an optional secondary authentication layer for secure token-based verification, not as the primary login method.
+- `Moyasar` was chosen for payment processing and webhook support.
+- `Google Maps Platform` was chosen for map display, geocoding, and location tracking.
+- A three-layer architecture was chosen to separate presentation, business logic, and data concerns.
+- The mixed SQL + NoSQL design was chosen to balance consistency and real-time performance.
