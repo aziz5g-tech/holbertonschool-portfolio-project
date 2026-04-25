@@ -860,6 +860,49 @@ sequenceDiagram
 
 ---
 
+## sequence diagrams showing interactions between components
+
+### 1) User Login
+```mermaid
+sequenceDiagram
+    participant FE as Front-end
+    participant BE as Back-end
+    participant DB as Database
+
+    FE->>BE: POST /auth/login (phone/email + password)
+    BE->>DB: Validate user credentials
+    DB-->>BE: User record + status
+    BE-->>FE: JWT token + user profile
+```
+
+### 2) Create Service Request
+```mermaid
+sequenceDiagram
+    participant FE as Front-end
+    participant BE as Back-end
+    participant DB as Database
+
+    FE->>BE: POST /requests (form data)
+    BE->>DB: Insert new request (pending)
+    DB-->>BE: request_id + saved row
+    BE-->>FE: Request created successfully
+```
+
+### 3) Companion Accept Request
+```mermaid
+sequenceDiagram
+    participant FE as Front-end
+    participant BE as Back-end
+    participant DB as Database
+
+    FE->>BE: POST /requests/{id}/accept
+    BE->>DB: Update request status = accepted
+    DB-->>BE: Update confirmation
+    BE-->>FE: Acceptance confirmed + updated status
+```
+
+---
+
 # External and Internal APIs
 
 ## External APIs
