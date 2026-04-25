@@ -1,6 +1,6 @@
-# Portfolio Project - Technical Documentation (Stage 3)
+# Rafeeq Project - Technical Documentation
 
-This document is the final Stage 3 summary. It consolidates the outputs from all Stage 3 tasks and provides links to detailed documents where content is large.
+Rafeeq is an MVP care-coordination platform built with a role-based architecture (Elderly User, Service Seeker, Companion, Admin) and API-driven workflows for request creation, companion assignment, and real-time service status tracking. This technical documentation defines the system architecture, data models, interaction flows, API specifications, and SCM/QA practices for implementation and quality control.
 
 ---
 
