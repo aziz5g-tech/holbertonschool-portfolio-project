@@ -1,30 +1,4 @@
-## Backend Overview
-
-This backend powers the Rafeeq platform using Node.js + Express. It manages authentication, users, companions, service requests, payments, wallet operations, ratings, support, administration, and real-time integrations.
-
-## Technology Boundaries
-- **MySQL**: source of truth for persistent business data.
-- **Firebase**: real-time features such as chats, live tracking, presence, notifications, and support chat.
-- **Moyasar**: payment provider for charge, refund, and transfer flows.
-
-## Architectural Style
-- Layered design: `routes` -> `controllers` -> `services` -> `repositories`
-- API versioning: `/api/v1`
-- Unified response format: `success`, `message`, `data`, `errors`
-
-## Backend Modules
-- Auth
-- Users
-- Companions
-- Service Requests
-- Payments
-- Wallet
-- Ratings
-- Support
-- Admin
-- Realtime (Firebase integration)
-
-## Key Classes
+## Key Classes (Attributes & Methods)
 
 ### User
 Represents any account type in the system: user, companion, or admin.
@@ -170,18 +144,4 @@ Stores real-time notifications.
 Represents a real-time support conversation.
 - **Attributes**: `id`, `ticket_id`, `sender_id`, `message_text`, `attachment_url`, `is_read`, `created_at`
 - **Methods**: `sendSupportMessage()`, `markAsRead()`, `attachSupportFile()`
-
-## Backend Responsibilities
-- Validate and normalize all incoming requests.
-- Keep MySQL as the source of truth for transactional data.
-- Keep Firebase for real-time delivery, chat, live tracking, and presence.
-- Integrate with Moyasar for payment, webhook confirmation, and refunds.
-- Enforce companion approval before activation.
-- Keep companion work optional and controlled by companion availability.
-- Support trip extensions, companion transfer, and independent trip sessions.
-- Support admin review, approval, suspension, and audit logging.
-
-## Notes
-- The backend document intentionally mirrors the business rules defined in the user and companion specifications.
-- Classes are designed to map cleanly to the MySQL tables and Firebase collections used by the project.
 
