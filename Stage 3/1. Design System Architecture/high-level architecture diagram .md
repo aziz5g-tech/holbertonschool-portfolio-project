@@ -1,6 +1,8 @@
 # MVP System Architecture
 ## High-Level Package Diagram (Three-Layer Architecture)
 
+# High-Level Architecture Diagram
+
 ```mermaid
 flowchart LR
     subgraph Client["Client Layer"]
@@ -19,6 +21,7 @@ flowchart LR
 
     subgraph External["External APIs"]
         MOYASAR["Payment API<br/>(Moyasar)"]
+        GMAPS["Maps API<br/>(Google Maps)"]
     end
 
     %% Client ↔ Backend
@@ -41,7 +44,14 @@ flowchart LR
 
     %% Backend ↔ Payment Gateway
     BE <-->|"Payment Processing<br/>Create / Verify Transactions"| MOYASAR
+
+    %% Frontend ↔ Google Maps
+    FE <-->|"Map Rendering / Location Selection"| GMAPS
+
+    %% Backend ↔ Google Maps (optional)
+    BE <-->|"Geocoding / Validation (optional)"| GMAPS
 ```
+
 
 ## Architecture Overview
 
