@@ -1,7 +1,7 @@
-# SCM and QA Strategies (Team Practical Version)
+# SCM and QA Strategies
 
 ## Purpose
-To establish practical procedures for managing code, the development lifecycle, and ensuring quality for the Stage 3 project.
+To establish practical procedures for managing code, the development lifecycle, and ensuring quality.
 
 ## Team Structure
 - Abdulaziz and Norah: Backend APIs (`Node.js`/`Express`), auth, request lifecycle, and API integration.
@@ -9,7 +9,7 @@ To establish practical procedures for managing code, the development lifecycle, 
 - Norah and Seba: Databases (`MySQL`, `Firebase Firestore`, `Firebase Storage`).
 - All team members: Testing ownership (unit, integration, and manual critical-flow tests).
 
-## Define SCM Processes
+## SCM Processes
 
 ### Version Control
 - Use `Git` with one shared remote repository.
