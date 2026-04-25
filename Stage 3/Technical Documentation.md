@@ -78,46 +78,55 @@ Rafeeq is an MVP care-coordination platform built with a role-based architecture
 
 ## High-Level Package Diagram (Three-Layer Architecture)
 
+# High-Level Architecture Diagram
+
 ```mermaid
 flowchart LR
-	subgraph Client["Client Layer"]
-		FE["Frontend<br/>(React)"]
-	end
+    subgraph Client["Client Layer"]
+        FE["Frontend<br/>(React)"]
+    end
 
-	subgraph Server["Server Layer"]
-		BE["Backend<br/>(Node.js + Express)"]
-	end
+    subgraph Server["Server Layer"]
+        BE["Backend<br/>(Node.js + Express)"]
+    end
 
-	subgraph Data["Data Layer"]
-		DB[(MySQL<br/>Database)]
-		DB2[(NoSQL<br/>Firebase Firestore)]
-		FS[(Firebase Storage)]
-	end
+    subgraph Data["Data Layer"]
+        DB[(MySQL<br/>Database)]
+        DB2[(NoSQL<br/>Firebase Firestore)]
+        FS[(Firebase Storage)]
+    end
 
-	subgraph External["External APIs"]
-		MOYASAR["Payment API<br/>(Moyasar)"]
-	end
+    subgraph External["External APIs"]
+        MOYASAR["Payment API<br/>(Moyasar)"]
+        GMAPS["Maps API<br/>(Google Maps)"]
+    end
 
-	%% Client ↔ Backend
-	FE <-->|"HTTP Requests / JSON"| BE
+    %% Client ↔ Backend
+    FE <-->|"HTTP Requests / JSON"| BE
 
-	%% Backend ↔ MySQL
-	BE <-->|"CRUD Operations<br/>(Structured Data)"| DB
+    %% Backend ↔ MySQL
+    BE <-->|"CRUD Operations<br/>(Structured Data)"| DB
 
-	%% Backend ↔ Firebase Firestore
-	BE <-->|"Admin SDK<br/>Validation / Background Jobs"| DB2
+    %% Backend ↔ Firebase Firestore
+    BE <-->|"Admin SDK<br/>Validation / Background Jobs"| DB2
 
-	%% Backend ↔ Firebase Storage
-	BE <-->|"Upload / Retrieve Files<br/>(Images, Documents)"| FS
+    %% Backend ↔ Firebase Storage
+    BE <-->|"Upload / Retrieve Files<br/>(Images, Documents)"| FS
 
-	%% Client ↔ Firebase Firestore
-	FE <-->|"Realtime Sync<br/>Auth / Notifications"| DB2
+    %% Client ↔ Firebase Firestore
+    FE <-->|"Realtime Sync<br/>Auth / Notifications"| DB2
 
-	%% Client ↔ Firebase Storage (optional direct upload)
-	FE <-->|"File Uploads (optional)"| FS
+    %% Client ↔ Firebase Storage (optional direct upload)
+    FE <-->|"File Uploads (optional)"| FS
 
-	%% Backend ↔ Payment Gateway
-	BE <-->|"Payment Processing<br/>Create / Verify Transactions"| MOYASAR
+    %% Backend ↔ Payment Gateway
+    BE <-->|"Payment Processing<br/>Create / Verify Transactions"| MOYASAR
+
+    %% Frontend ↔ Google Maps
+    FE <-->|"Map Rendering / Location Selection"| GMAPS
+
+    %% Backend ↔ Google Maps (optional)
+    BE <-->|"Geocoding / Validation (optional)"| GMAPS
 ```
 
 ## Architecture Overview
