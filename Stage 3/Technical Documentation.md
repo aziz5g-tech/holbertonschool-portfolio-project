@@ -70,7 +70,7 @@ Rafeeq is an MVP care-coordination platform built with a role-based architecture
 - The platform will not include advanced features like video calls or AI at this stage.
 
 ### 0.2 Mockups
-- The file `Mockups.md` is currently empty.
+- Figma mockups: https://www.figma.com/design/x9hMMW6QkC3SZNpvP9DhdO/Rafeeq?node-id=466-1050&t=qBgle9rrTheDQCe1-1
 
 ---
 
