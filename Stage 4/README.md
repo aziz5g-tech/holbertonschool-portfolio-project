@@ -1,10 +1,10 @@
 Under Updating ...
 
 
-Sprint planning 
-Source Repository (GitHub) 
-Bug Tracking 
-Testing Evidence 
-Production Environment 
-Sprint Reviews 
-Retrospectives 
+Sprint planning <br>
+Source Repository (GitHub) <br>
+Bug Tracking <br>
+Testing Evidence <br>
+Production Environment <br>
+Sprint Reviews <br>
+Retrospectives <br>
