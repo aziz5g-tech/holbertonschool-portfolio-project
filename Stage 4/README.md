@@ -3,9 +3,9 @@
 > **Project:** Rafeeq — Companion-on-demand platform for seniors and their families
 > **Repository:** https://github.com/aziz5g-tech/Rafeeq
 > **Production Environment:** https://rafeeqsa.me
-> **Stack:** Node.js/Express · React/Vite · MySQL · Firebase (Firestore/Storage/FCM) · Moyasar
+> **Stack:** Node.js/Express · React/Vite · MySQL · Firebase (Firestore/FCM, Storage optional) · Local FS storage · Moyasar
 > **Architecture:** Modular monolith (single Express app + single React SPA + single MySQL DB) deployed on Hostinger
-> **Duration:** 2026-04-29 → 2026-06-01 (~5 weeks)
+> **Duration:** 2026-04-29 → 2026-06-02 (~5 weeks, including Stage 4 closeout day)
 > **Team Size:** 4 members
 
 ---
@@ -116,6 +116,21 @@ The Stage 3 user stories were broken down into four sprints, each 1–2 weeks lo
 | Should | Fix stale `/admin/select-companion` links to `/admin/companions` | Shatha | 2026-05-29 | route audit |
 | Could | Update README with project links | Abdulaziz | 2026-05-31 | — |
 
+### Post-Sprint Hardening — Stage 4 Closeout (2026-06-02)
+
+**Goal:** Close the QA-tooling gap before academic submission. The original Sprint 2 plan marked Jest and Postman as `Won't Have` to protect the MVP delivery window; once Sprint 4 closed cleanly, the team allocated a single closeout day to bring the QA tooling up to the level promised in `Docs/scm-and-qa.md`.
+
+| Priority | Task | Owner | Deadline | Dependency |
+|----------|------|-------|----------|-----------|
+| Must | Local docs cleanup + memory sync (STATUS, session-handoff) | Abdulaziz | 2026-06-02 | — |
+| Must | Fix `POST /api/admin/users` validator gap (`gender` + `date_of_birth`) | Abdulaziz | 2026-06-02 | users table schema |
+| Must | Unify JWT expiry defaults + drop hardcoded 7-day refresh TTL | Abdulaziz | 2026-06-02 | env-validator |
+| Must | Postman collection covering all 94 API endpoints | Abdulaziz | 2026-06-02 | — |
+| Must | Jest unit tests for 6 core services (33 scenarios) | Abdulaziz | 2026-06-02 | services stable |
+| Must | GitHub Actions CI workflow (lint + tests on every PR) | Abdulaziz | 2026-06-02 | Jest baseline |
+| Must | Branch protection rules on `main` and `development` | Abdulaziz | 2026-06-02 | CI workflow |
+| Must | GitHub Project board sync (cards aligned with merged PRs) | Abdulaziz | 2026-06-02 | — |
+
 ---
 
 ## Task 1 — Execute Development Tasks
@@ -154,11 +169,12 @@ Stage 4 produced **108 merged pull requests** across the 5-week window (PR #1 th
 
 ## Task 2 — Monitor Progress and Adjust
 
-Progress was tracked through three lightweight loops:
+Progress was tracked through four lightweight loops:
 
-1. **Daily stand-ups** (15 min) — what each member shipped yesterday, what's blocking today, dependencies on others.
-2. **`Docs/STATUS.md`** as a living single-source-of-truth, updated per feature branch. PM and SCM scan it before each sprint review.
-3. **`Docs/session-handoff.md`** — captures the *active context* for the next conversation (next branch to pick up, recent decisions, gotchas) so a member returning from a few days off can resume in minutes instead of hours.
+1. **Daily stand-ups** (15 min, asynchronous in the team Discord channel) — what each member shipped yesterday, what's blocking today, dependencies on others.
+2. **GitHub Project board** (https://github.com/users/aziz5g-tech/projects/2) — Kanban-style columns reflecting sprint state (`Backlog`, `In Progress`, `In Review`, `Done`). Cards are linked to Issues and PRs so transitions happen automatically when PRs merge. The PM uses the board for sprint reviews; the SCM uses it to verify every merged PR maps back to a planned task.
+3. **`Docs/STATUS.md`** as a living single-source-of-truth, updated per feature branch. PM and SCM scan it before each sprint review.
+4. **`Docs/session-handoff.md`** — captures the *active context* for the next conversation (next branch to pick up, recent decisions, gotchas) so a member returning from a few days off can resume in minutes instead of hours. (Kept local-only / `gitignored` because it changes daily and would generate constant merge noise.)
 
 ### Sprint velocity
 
@@ -217,7 +233,7 @@ Bugs are tracked through the `fix/<scope>` branch convention rather than a dedic
 | Question | Answer |
 |----------|--------|
 | **What worked well?** | Pair-design of the schema between Norah (DB) and Abdulaziz (API) caught FK ambiguities before any code was written. Monorepo decision unblocked frontend and backend developers to work in the same repo without merge pain. |
-| **What didn't work?** | Early commits (`Feat: addming database info` × 7) showed messy iteration on the schema instead of clean migration deltas. Some hotfix commits were force-pushed in the first week, losing review trail. |
+| **What didn't work?** | Early commits (`Feat: addming database info` × 7) showed messy iteration on the schema instead of clean migration deltas. Some hotfix commits were force-pushed in the first week, losing review trail — this was the lesson that drove the strict no-force-push rule adopted from Sprint 2 onward. |
 | **Improvements for next sprint** | Adopt conventional commits strictly. Every change goes through a PR — no direct pushes to `development`. Track DB changes as numbered migration files, not as edits to the seed schema. |
 
 ### Sprint 2 Review (2026-05-20)
@@ -278,15 +294,16 @@ Because the MVP is a monolith deployed as a single Node.js application serving i
 
 | Tool | Coverage | Status |
 |------|----------|--------|
-| **ESLint** (`eslint . --max-warnings 0`) | Both `backend/` and `frontend/` | ✅ Clean as merge gate on every PR |
+| **ESLint** (`npm run lint` → `eslint .`) | Both `backend/` and `frontend/` | ✅ Clean as merge gate on every PR; also enforced by CI |
+| **Jest** (`npm test`) | 6 core services: `auth`, `payment`, `companion-request`, `request`, `admin.user`, `wallet` | ✅ **33 unit tests** passing in ~9 s (added in closeout — see Post-Sprint Hardening) |
+| **Postman collection** (`Docs/Rafeeq.postman_collection.json`) | All 94 API endpoints in 25 folders, with body examples and environment variables | ✅ Importable artifact, ready for regression runs (added in closeout) |
+| **GitHub Actions CI/CD** (`.github/workflows/ci.yml`) | Backend ESLint + Jest on every PR to `development` and `main` | ✅ Required check before merge (added in closeout) |
 | **Manual critical-flow checklist** (from `Docs/scm-and-qa.md`) | Auth, request, trip, payment, admin, realtime | ✅ Executed before every release-to-staging |
 | **Browser DevTools** | Frontend errors, network failures, layout regressions | ✅ Used by all team members during development |
 | **Hostinger Application Logs** | Production runtime errors, boot failures | ✅ Used after every deploy |
 | **Firebase Console** | Firestore writes and Storage uploads in real time | ✅ Used to verify chat + tracking and document uploads |
 | **Manual API calls (cURL + browser DevTools)** | Backend endpoints during development | ✅ Used by API authors |
-| Jest / Supertest | Unit + integration tests | ⏸ Deferred per QA plan, after MVP scope stabilizes |
-| Postman collection | API regression | ⏸ Deferred per QA plan |
-| CI/CD pipeline | Automated lint + test gating | ⏸ Manual `git push` to Hostinger via Git-Deploy is the current path |
+| Supertest (HTTP integration tests) | End-to-end API flow tests | ⏸ Post-MVP — Jest baseline covers service-layer logic; HTTP-layer tests deferred to Stage 5 |
 
 ### Manual critical-flow test results
 
@@ -314,7 +331,7 @@ The checklist below was executed against staging at the end of Sprint 4 (2026-06
 
 ### Outstanding bugs at end of Sprint 4
 
-**None blocking MVP.** Known limitations documented in `Docs/STATUS.md` under "ما لم يُنجز بعد" — Forgot Password UI, Support Tickets UI, FCM web push, and Postman/Jest are all explicitly out of MVP scope.
+**None blocking MVP.** All items that were deferred-by-design in Sprint 2 (Forgot Password UI, Support Tickets UI, Postman, Jest) shipped either in late Sprint 4 (PRs #110–#113) or during the Stage 4 Closeout day (PRs #114–#119). The only remaining item from the original `Won't Have` list is FCM client-side web push, which is genuinely post-MVP because it requires deployment-side setup (VAPID key + service worker) the academic stage does not require.
 
 ---
 
@@ -324,17 +341,21 @@ The checklist below was executed against staging at the end of Sprint 4 (2026-06
 |-------------|-----------------|
 | **Source repository** | https://github.com/aziz5g-tech/Rafeeq |
 | **Production environment** | https://rafeeqsa.me |
-| **Sprint planning** | This document (Task 0) — 4 sprints × ~15 tasks each with MoSCoW priorities, owners, deadlines, dependencies |
+| **Sprint planning** | This document (Task 0) — 4 sprints + Stage 4 Closeout × ~15 tasks each with MoSCoW priorities, owners, deadlines, dependencies |
 | **Sprint reviews** | This document (Task 3) — 4 reviews with demo content for stakeholders |
 | **Sprint retrospectives** | This document (Task 3) — 4 retros following the standard "what worked / what didn't / improvements" template |
-| **Bug tracking** | `fix/<scope>` branch naming convention + `Docs/STATUS.md` fix log — see Task 2 bug table. Full history: `git log --all --oneline | grep "^[a-f0-9]* fix:"` |
-| **Testing evidence and results** | Task 4 manual critical-flow table (17 flows, 100% pass) + ESLint-clean status on all merged PRs (`npm run lint` in both `backend/` and `frontend/`) |
-| **Process documentation** | `Docs/scm-and-qa.md` (SCM and QA strategy) · `Docs/architecture.md` · `Docs/companion-specs.md` · `Docs/product-requirements.md` · `Docs/session-handoff.md` |
-| **Deployment guide** | `Docs/hostinger-deploy.md` |
-| **Firebase Storage guide** | `Docs/firebase-storage-setup.md` |
+| **Project management board** | GitHub Projects: https://github.com/users/aziz5g-tech/projects/2 — cards linked to Issues and PRs; columns reflect sprint state |
+| **Bug tracking** | `fix/<scope>` branch naming convention + `Docs/STATUS.md` fix log — see Task 2 bug table. Full history: `git log --all --oneline \| grep "^[a-f0-9]* fix:"` |
+| **Automated test suite** | `backend/tests/unit/*.test.js` — Jest, 33 scenarios across 6 services. Run with `cd backend && npm test`. See Task 4 QA tooling table |
+| **API documentation** | `Docs/Rafeeq.postman_collection.json` — Postman v2.1 collection, 94 endpoints in 25 folders, importable as-is |
+| **CI/CD pipeline** | `.github/workflows/ci.yml` — runs ESLint + Jest on every PR. Status visible at https://github.com/aziz5g-tech/Rafeeq/actions |
+| **Branch protection** | Configured on `main` (PR + 1 review + CI required) and `development` (PR + CI required). Visible at https://github.com/aziz5g-tech/Rafeeq/settings/branches |
+| **Testing evidence and results** | Task 4 manual critical-flow table (17 flows, 100% pass) + Jest 33/33 passing + ESLint-clean on all merged PRs (enforced by CI) |
+| **Process documentation** | `Docs/scm-and-qa.md` (SCM and QA strategy) · `Docs/architecture.md` · `Docs/companion-specs.md` · `Docs/product-requirements.md` |
 
 ### Key Pull Requests (chronological)
 
+**Core MVP delivery (Sprints 1–4):**
 - **PR #94, #95, #96** — Firebase service account credential loading (3 iterations to handle Hostinger's escape behavior)
 - **PR #97** — Saved client data + optional request fields
 - **PR #99** — `/me` tabbed management page
@@ -344,17 +365,33 @@ The checklist below was executed against staging at the end of Sprint 4 (2026-06
 - **PR #105, #106** — Map picker cleanup
 - **PR #107** — Request flow stepper + active-request lock + companion message toast
 - **PR #108** — Switchable storage backend with admin toggle
+- **PR #109** — Client + Companion trip-tracking screens (live map, car/house icons)
+- **PR #110** — Login by mobile (email-XOR-mobile toggle in UI)
+- **PR #111** — Support tickets user-facing UI (Support.jsx + SupportTicketDetail.jsx)
+- **PR #112** — Forgot password + Reset password flow
+- **PR #113** — Admin reject-document modal (replaces `window.prompt`)
+
+**Stage 4 Closeout (2026-06-02):**
+- **PR #114** — Docs cleanup: STATUS and session-handoff sync; untrack local-only docs
+- **PR #115** — Fix `POST /api/admin/users` (`gender` + `date_of_birth` required by schema)
+- **PR #116** — JWT expiry consistency: unify defaults + replace hardcoded 7-day refresh TTL
+- **PR #117** — Postman collection covering all 94 API endpoints
+- **PR #118** — Jest unit tests for 6 core services (33 scenarios)
+- **PR #119** — GitHub Actions CI workflow (lint + tests on every PR)
 
 ### Project metrics at Stage 4 close
 
 | Metric | Value |
 |--------|-------|
-| Sprints planned | 4 |
-| Sprints completed | 4 |
-| Total merged pull requests | 108 |
-| Total commits (excluding merges) | ~120 |
+| Sprints planned | 4 (+ Stage 4 Closeout day) |
+| Sprints completed | 4 / 4 (100%) |
+| Total merged pull requests | 119 |
+| Total commits (excluding merges) | ~130 |
 | Total bugs resolved | 13 (all within the sprint they were found) |
 | Critical-flow tests passing | 17 / 17 |
+| **Automated Jest tests passing** | **33 / 33** (~9 s runtime) |
+| **API endpoints documented in Postman** | **94 across 25 folders** |
+| **CI runs required before merge** | Backend lint + Jest (on every PR to `main` or `development`) |
 | ESLint warnings on `development` | 0 |
 | Production downtime in Stage 4 | < 30 minutes (single 503 incident from missing controller exports, resolved < 30 min) |
 | Lines of code (frontend + backend, no `node_modules`/build) | ~18,000 |
@@ -363,4 +400,6 @@ The checklist below was executed against staging at the end of Sprint 4 (2026-06
 
 ## Reflection
 
-The combination of a small team (4 people), well-defined roles, conventional commits, mandatory PRs, and a continuously-updated `STATUS.md` produced a deployable MVP in 5 weeks with zero unresolved bugs and 100% sprint goal completion. The two deviations from the original QA plan (Jest + Postman) were conscious trade-offs: shipping a working MVP that all stakeholders can interact with was prioritized over test scaffolding that would have added value primarily after the API contracts stabilized — exactly the point we are at now, entering Stage 5.
+The combination of a small team (4 people), well-defined roles, conventional commits, mandatory PRs, and a continuously-updated `STATUS.md` produced a deployable MVP in 5 weeks with zero unresolved bugs and 100% sprint goal completion across all four delivery sprints.
+
+The two QA-tooling deviations from the original plan (Jest + Postman, both moved to `Won't Have` during Sprint 2) were conscious trade-offs: shipping a working MVP that all stakeholders can interact with was prioritized over test scaffolding that would have added value primarily after the API contracts stabilized. Once Sprint 4 closed cleanly, a dedicated **Stage 4 Closeout day** (2026-06-02) brought the QA tooling up to the level promised in `Docs/scm-and-qa.md`: a 94-endpoint Postman collection, a 33-test Jest baseline, a GitHub Actions CI workflow that runs both on every PR, and branch protection rules that enforce the SCM strategy at the platform level. Combined with the existing critical-flow checklist and clean ESLint history, this closes Task 4 (Final Integration and QA Testing) with both manual and automated coverage in place.
