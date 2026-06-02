@@ -1,0 +1,991 @@
+{
+  "info": {
+    "_postman_id": "rafeeq-api-2026-06",
+    "name": "Rafeeq API",
+    "description": "Complete API collection for Rafeeq (rafeeqsa.me) — a companion-on-demand platform for seniors.\n\n**Base URL:** Set `baseUrl` variable to `http://localhost:3000` for local dev or `https://rafeeqsa.me` for production.\n\n**Auth:** Collection-level Bearer auth uses `{{accessToken}}`. Run `Auth → Login` first to populate it (manually copy the response).\n\n**Conventions:** All API routes are under `/api/*`. Only `/webhooks/*` lives at the root.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "refreshToken", "value": "", "type": "string" },
+    { "key": "requestId", "value": "1", "type": "string" },
+    { "key": "userId", "value": "1", "type": "string" },
+    { "key": "companionId", "value": "2", "type": "string" },
+    { "key": "docId", "value": "1", "type": "string" },
+    { "key": "docTypeId", "value": "1", "type": "string" },
+    { "key": "rateId", "value": "1", "type": "string" },
+    { "key": "addressId", "value": "1", "type": "string" },
+    { "key": "beneficiaryId", "value": "1", "type": "string" },
+    { "key": "withdrawalId", "value": "1", "type": "string" },
+    { "key": "ticketId", "value": "1", "type": "string" },
+    { "key": "deviceToken", "value": "sample-fcm-token", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Public",
+      "description": "Endpoints accessible without authentication.",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/health", "host": ["{{baseUrl}}"], "path": ["api", "health"] },
+            "description": "Returns service status and current timestamp. Use for uptime monitoring."
+          }
+        },
+        {
+          "name": "Public runtime config",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/api/config/public", "host": ["{{baseUrl}}"], "path": ["api", "config", "public"] },
+            "description": "Returns runtime config values that are safe to expose to the SPA (currently: google_maps_api_key)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reference Data",
+      "description": "Read-only lookup data used by the request flow.",
+      "item": [
+        {
+          "name": "List service types",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/reference/service-types", "host": ["{{baseUrl}}"], "path": ["api", "reference", "service-types"] },
+            "description": "Returns the catalog of companion service types (medical visit, in-home, shopping, etc.)."
+          }
+        },
+        {
+          "name": "List health conditions",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/reference/health-conditions", "host": ["{{baseUrl}}"], "path": ["api", "reference", "health-conditions"] },
+            "description": "Returns the catalog of health conditions used during request creation."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "description": "Registration, login, and token management.",
+      "item": [
+        {
+          "name": "Register client",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"first_name\": \"Ahmad\",\n  \"last_name\": \"AlSaleh\",\n  \"gender\": \"male\",\n  \"date_of_birth\": \"1990-05-12\",\n  \"mobile\": \"0512345678\",\n  \"email\": \"ahmad@example.com\",\n  \"password\": \"Secret123\",\n  \"confirm_password\": \"Secret123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"] },
+            "description": "Creates a new client account. Sends an OTP to the email for verification. Rate-limited."
+          }
+        },
+        {
+          "name": "Register companion",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"first_name\": \"Khalid\",\n  \"last_name\": \"AlOtaibi\",\n  \"gender\": \"male\",\n  \"date_of_birth\": \"1988-03-22\",\n  \"mobile\": \"0598765432\",\n  \"email\": \"khalid@example.com\",\n  \"password\": \"Secret123\",\n  \"confirm_password\": \"Secret123\",\n  \"terms_accepted\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/companions/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "companions", "register"] },
+            "description": "Creates a new companion account. Requires terms acceptance. Companion stays inactive until admin approval."
+          }
+        },
+        {
+          "name": "Verify email (OTP)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"ahmad@example.com\",\n  \"otp\": \"123456\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/verify-email", "host": ["{{baseUrl}}"], "path": ["api", "auth", "verify-email"] },
+            "description": "Verifies the email OTP received after registration. Activates the account."
+          }
+        },
+        {
+          "name": "Resend OTP",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"ahmad@example.com\",\n  \"purpose\": \"email_verification\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/resend-otp", "host": ["{{baseUrl}}"], "path": ["api", "auth", "resend-otp"] },
+            "description": "Resends an OTP. purpose: email_verification | login | password_reset. Rate-limited."
+          }
+        },
+        {
+          "name": "Forgot password",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"ahmad@example.com\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/forgot-password", "host": ["{{baseUrl}}"], "path": ["api", "auth", "forgot-password"] },
+            "description": "Sends a password-reset OTP to the email. Returns the same response whether the email exists or not (prevents user enumeration)."
+          }
+        },
+        {
+          "name": "Reset password",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"ahmad@example.com\",\n  \"otp\": \"123456\",\n  \"new_password\": \"NewSecret123\",\n  \"confirm_password\": \"NewSecret123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/reset-password", "host": ["{{baseUrl}}"], "path": ["api", "auth", "reset-password"] },
+            "description": "Verifies the password-reset OTP and sets a new password. Invalidates all refresh tokens for the user."
+          }
+        },
+        {
+          "name": "Login (email)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"ahmad@example.com\",\n  \"password\": \"Secret123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] },
+            "description": "Logs in with email + password. Returns access_token + refresh_token. Use email XOR mobile (exactly one)."
+          }
+        },
+        {
+          "name": "Login (mobile)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"mobile\": \"0512345678\",\n  \"password\": \"Secret123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] },
+            "description": "Logs in with mobile + password. Returns access_token + refresh_token."
+          }
+        },
+        {
+          "name": "Refresh access token",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refresh_token\": \"{{refreshToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/refresh", "host": ["{{baseUrl}}"], "path": ["api", "auth", "refresh"] },
+            "description": "Issues a new access token using the refresh token."
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refresh_token\": \"{{refreshToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/auth/logout", "host": ["{{baseUrl}}"], "path": ["api", "auth", "logout"] },
+            "description": "Revokes the refresh token (single-device logout)."
+          }
+        },
+        {
+          "name": "Get my profile",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] },
+            "description": "Returns the authenticated user's profile."
+          }
+        },
+        {
+          "name": "Mint Firebase custom token",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/auth/firebase-token", "host": ["{{baseUrl}}"], "path": ["api", "auth", "firebase-token"] },
+            "description": "Issues a short-lived Firebase custom token so the client can sign in to Firebase (used for Firestore chat + lifecycle events subscriptions)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Me - Devices",
+      "description": "Register / unregister push notification devices.",
+      "item": [
+        {
+          "name": "Register device",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"token\": \"{{deviceToken}}\",\n  \"platform\": \"web\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/me/devices", "host": ["{{baseUrl}}"], "path": ["api", "me", "devices"] },
+            "description": "Registers an FCM device token for push notifications. platform: ios | android | web."
+          }
+        },
+        {
+          "name": "Unregister device",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/me/devices/{{deviceToken}}", "host": ["{{baseUrl}}"], "path": ["api", "me", "devices", "{{deviceToken}}"] },
+            "description": "Removes a registered FCM token (logout from a specific device)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Me - Addresses",
+      "description": "Client's saved pickup addresses (max 20). Used to autofill the request form.",
+      "item": [
+        {
+          "name": "List addresses",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/me/addresses", "host": ["{{baseUrl}}"], "path": ["api", "me", "addresses"] }
+          }
+        },
+        {
+          "name": "Create address",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"label\": \"Home\",\n  \"city\": \"Riyadh\",\n  \"district\": \"Al Olaya\",\n  \"street\": \"King Fahd Rd\",\n  \"building_number\": \"123\",\n  \"apartment_number\": \"5A\",\n  \"short_address\": \"Olaya Tower\",\n  \"lat\": 24.7136,\n  \"lng\": 46.6753\n}" },
+            "url": { "raw": "{{baseUrl}}/api/me/addresses", "host": ["{{baseUrl}}"], "path": ["api", "me", "addresses"] }
+          }
+        },
+        {
+          "name": "Update address",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"label\": \"Office\",\n  \"city\": \"Riyadh\",\n  \"district\": \"Al Malqa\",\n  \"lat\": 24.8000,\n  \"lng\": 46.6500\n}" },
+            "url": { "raw": "{{baseUrl}}/api/me/addresses/{{addressId}}", "host": ["{{baseUrl}}"], "path": ["api", "me", "addresses", "{{addressId}}"] }
+          }
+        },
+        {
+          "name": "Delete address",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/me/addresses/{{addressId}}", "host": ["{{baseUrl}}"], "path": ["api", "me", "addresses", "{{addressId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Me - Beneficiaries",
+      "description": "Beneficiaries that the client requests services on behalf of (e.g., parents).",
+      "item": [
+        {
+          "name": "List beneficiaries",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/me/beneficiaries", "host": ["{{baseUrl}}"], "path": ["api", "me", "beneficiaries"] }
+          }
+        },
+        {
+          "name": "Create beneficiary",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"full_name\": \"Saleh AlSaleh\",\n  \"age\": 72,\n  \"mobile\": \"0511112222\",\n  \"gender\": \"male\",\n  \"kinship\": \"father\",\n  \"health_condition_ids\": [1, 2]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/me/beneficiaries", "host": ["{{baseUrl}}"], "path": ["api", "me", "beneficiaries"] },
+            "description": "kinship must be one of: son, daughter, father, mother, brother, sister, husband, wife, grandfather, grandmother, uncle_paternal, aunt_paternal, uncle_maternal, aunt_maternal, relative_other, friend, other."
+          }
+        },
+        {
+          "name": "Update beneficiary",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"full_name\": \"Saleh AlSaleh\",\n  \"age\": 73,\n  \"mobile\": \"0511112222\",\n  \"gender\": \"male\",\n  \"kinship\": \"father\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/me/beneficiaries/{{beneficiaryId}}", "host": ["{{baseUrl}}"], "path": ["api", "me", "beneficiaries", "{{beneficiaryId}}"] }
+          }
+        },
+        {
+          "name": "Delete beneficiary",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/me/beneficiaries/{{beneficiaryId}}", "host": ["{{baseUrl}}"], "path": ["api", "me", "beneficiaries", "{{beneficiaryId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Me - Health Conditions",
+      "description": "Health conditions saved on the client's own profile.",
+      "item": [
+        {
+          "name": "Get my health conditions",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/me/health-conditions", "host": ["{{baseUrl}}"], "path": ["api", "me", "health-conditions"] }
+          }
+        },
+        {
+          "name": "Set my health conditions",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"health_condition_ids\": [1, 2, 3]\n}" },
+            "url": { "raw": "{{baseUrl}}/api/me/health-conditions", "host": ["{{baseUrl}}"], "path": ["api", "me", "health-conditions"] },
+            "description": "Replaces the full set of saved health conditions for the client."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Service Requests (Client)",
+      "description": "Full lifecycle for service requests from the client's perspective.",
+      "item": [
+        {
+          "name": "Create request",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"request_for\": \"self\",\n  \"service_type_id\": 1,\n  \"with_car\": true,\n  \"health_condition_ids\": [1],\n  \"location\": {\n    \"pickup\": { \"lat\": 24.7136, \"lng\": 46.6753 },\n    \"destination\": { \"lat\": 24.8000, \"lng\": 46.6500 }\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/api/requests", "host": ["{{baseUrl}}"], "path": ["api", "requests"] },
+            "description": "Creates a new request. Blocked with 409 ACTIVE_REQUEST_EXISTS if client already has a pending/accepted/in_progress request. For 'other', include beneficiary object."
+          }
+        },
+        {
+          "name": "List my requests",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/requests/me?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "requests", "me"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }, { "key": "status", "value": "completed", "disabled": true }] }
+          }
+        },
+        {
+          "name": "Get my active request",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/requests/me/active", "host": ["{{baseUrl}}"], "path": ["api", "requests", "me", "active"] },
+            "description": "Returns the active request id + status + companion_id, or null. Used by the active-request banner."
+          }
+        },
+        {
+          "name": "Get my request",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/requests/me/{{requestId}}", "host": ["{{baseUrl}}"], "path": ["api", "requests", "me", "{{requestId}}"] }
+          }
+        },
+        {
+          "name": "List available companions",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/requests/{{requestId}}/available-companions?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "requests", "{{requestId}}", "available-companions"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }, { "key": "gender", "value": "male", "disabled": true }] }
+          }
+        },
+        {
+          "name": "Assign companion",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"companion_id\": {{companionId}}\n}" },
+            "url": { "raw": "{{baseUrl}}/api/requests/{{requestId}}/assign-companion", "host": ["{{baseUrl}}"], "path": ["api", "requests", "{{requestId}}", "assign-companion"] }
+          }
+        },
+        {
+          "name": "Cancel request",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/requests/{{requestId}}/cancel", "host": ["{{baseUrl}}"], "path": ["api", "requests", "{{requestId}}", "cancel"] },
+            "description": "Cancels the request. If already paid and companion accepted, triggers automatic refund."
+          }
+        },
+        {
+          "name": "Rate request",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"stars\": 5,\n  \"comment\": \"Excellent service\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/requests/{{requestId}}/rate", "host": ["{{baseUrl}}"], "path": ["api", "requests", "{{requestId}}", "rate"] }
+          }
+        },
+        {
+          "name": "Get my rating",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/requests/me/{{requestId}}/rating", "host": ["{{baseUrl}}"], "path": ["api", "requests", "me", "{{requestId}}", "rating"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments (Client)",
+      "description": "Moyasar checkout flow. Live + demo modes (admin toggleable).",
+      "item": [
+        {
+          "name": "Start checkout",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/payments/requests/{{requestId}}/checkout", "host": ["{{baseUrl}}"], "path": ["api", "payments", "requests", "{{requestId}}", "checkout"] },
+            "description": "Starts a Moyasar invoice (live mode) or auto-marks paid (demo mode). Returns checkout URL when live."
+          }
+        },
+        {
+          "name": "Get my payment",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/payments/requests/{{requestId}}", "host": ["{{baseUrl}}"], "path": ["api", "payments", "requests", "{{requestId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Chat",
+      "description": "Backend-only writes; reads go through Firestore directly from the client.",
+      "item": [
+        {
+          "name": "Send message",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"text\": \"Hello, I will arrive in 10 minutes.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/chats/{{requestId}}/messages", "host": ["{{baseUrl}}"], "path": ["api", "chats", "{{requestId}}", "messages"] },
+            "description": "Posts a chat message. Backend writes to Firestore (clients cannot write directly per security rules)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companion - Profile",
+      "description": "Companion's own profile management.",
+      "item": [
+        {
+          "name": "Get my profile",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/profile", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "profile"] }
+          }
+        },
+        {
+          "name": "Upsert profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"gender\": \"male\",\n  \"nationality\": \"Saudi\",\n  \"date_of_birth\": \"1988-03-22\",\n  \"city\": \"Riyadh\",\n  \"district\": \"Al Malqa\",\n  \"short_description\": \"Experienced caregiver with patience.\",\n  \"experience_summary\": \"5 years assisting elderly with medical visits.\",\n  \"health_status\": \"Healthy, non-smoker\",\n  \"has_car\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/api/companions/me/profile", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "profile"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companion - Documents",
+      "description": "Required documents for companion verification.",
+      "item": [
+        {
+          "name": "List document types",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/documents/types", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "documents", "types"] },
+            "description": "Returns the active document types the companion must upload (ID, selfie, IBAN, etc.)."
+          }
+        },
+        {
+          "name": "List my documents",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/documents", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "documents"] }
+          }
+        },
+        {
+          "name": "Upload document",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "document_type", "value": "id_photo", "type": "text" },
+                { "key": "file", "type": "file", "src": [] }
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/api/companions/me/documents", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "documents"] },
+            "description": "Multipart upload. document_type is lowercase alphanumeric+underscores. File must be JPG/PNG/PDF, max 5MB."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companion - Requests",
+      "description": "Incoming requests from clients.",
+      "item": [
+        {
+          "name": "List incoming requests",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/requests?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "requests"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }, { "key": "status", "value": "pending", "disabled": true }] }
+          }
+        },
+        {
+          "name": "Get incoming request",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/requests/{{requestId}}", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "requests", "{{requestId}}"] },
+            "description": "Returns request details. Client mobile + last name are masked until the companion accepts (privacy gate)."
+          }
+        },
+        {
+          "name": "Accept request",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/requests/{{requestId}}/accept", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "requests", "{{requestId}}", "accept"] },
+            "description": "Accepts the request. Triggers an auto-greeting chat message + Firestore lifecycle event."
+          }
+        },
+        {
+          "name": "Reject request",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/requests/{{requestId}}/reject", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "requests", "{{requestId}}", "reject"] },
+            "description": "Rejects the request. Triggers automatic full refund to the client."
+          }
+        },
+        {
+          "name": "Start trip",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"lat\": 24.7136,\n  \"lng\": 46.6753\n}" },
+            "url": { "raw": "{{baseUrl}}/api/companions/me/requests/{{requestId}}/start-trip", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "requests", "{{requestId}}", "start-trip"] }
+          }
+        },
+        {
+          "name": "End trip",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"lat\": 24.8000,\n  \"lng\": 46.6500\n}" },
+            "url": { "raw": "{{baseUrl}}/api/companions/me/requests/{{requestId}}/end-trip", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "requests", "{{requestId}}", "end-trip"] },
+            "description": "Ends the trip. Credits the net amount to the companion wallet."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companion - Rates",
+      "description": "Service-type pricing set by the companion.",
+      "item": [
+        {
+          "name": "List my rates",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/rates", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "rates"] }
+          }
+        },
+        {
+          "name": "Upsert rate",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"service_type_id\": 1,\n  \"price\": 150.00,\n  \"notes\": \"Includes travel within Riyadh\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/companions/me/rates", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "rates"] }
+          }
+        },
+        {
+          "name": "Deactivate rate",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/rates/{{rateId}}", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "rates", "{{rateId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companion - Wallet",
+      "description": "Earnings and withdrawal requests.",
+      "item": [
+        {
+          "name": "Get my wallet",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/wallet", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "wallet"] }
+          }
+        },
+        {
+          "name": "Request withdrawal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"amount\": 500.00,\n  \"request_note\": \"End-of-month withdrawal\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/companions/me/withdrawals", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "withdrawals"] }
+          }
+        },
+        {
+          "name": "List my withdrawals",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/withdrawals", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "withdrawals"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companion - Availability & Location",
+      "description": "Online/offline status and live GPS updates during trips.",
+      "item": [
+        {
+          "name": "Get my availability",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/companions/me/availability", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "availability"] }
+          }
+        },
+        {
+          "name": "Set availability",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"work_status\": \"available\",\n  \"connection_status\": \"online\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/companions/me/availability", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "availability"] }
+          }
+        },
+        {
+          "name": "Update location",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"lat\": 24.7136,\n  \"lng\": 46.6753\n}" },
+            "url": { "raw": "{{baseUrl}}/api/companions/me/location", "host": ["{{baseUrl}}"], "path": ["api", "companions", "me", "location"] },
+            "description": "Publishes the companion's GPS to Firestore trip_locations/{request_id}. Called every ~10s during an active trip."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Support",
+      "description": "Support tickets (open to authenticated users + optional guest).",
+      "item": [
+        {
+          "name": "Create ticket",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"category\": \"complaint\",\n  \"subject\": \"App did not refund my cancelled trip\",\n  \"message\": \"Details: I cancelled trip #45 after the companion accepted but before they started the trip, and the refund did not appear in my Moyasar account after 48 hours.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/support/tickets", "host": ["{{baseUrl}}"], "path": ["api", "support", "tickets"] },
+            "description": "Creates a support ticket. category: complaint | suggestion | question | other. Auth optional (guest_name + guest_email for unauthenticated)."
+          }
+        },
+        {
+          "name": "List my tickets",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/support/tickets/me?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "support", "tickets", "me"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }] }
+          }
+        },
+        {
+          "name": "Get my ticket",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/support/tickets/me/{{ticketId}}", "host": ["{{baseUrl}}"], "path": ["api", "support", "tickets", "me", "{{ticketId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Files",
+      "description": "Signed-URL file downloads (local storage backend).",
+      "item": [
+        {
+          "name": "Download file",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/files/download?token=SIGNED_TOKEN_HERE", "host": ["{{baseUrl}}"], "path": ["api", "files", "download"], "query": [{ "key": "token", "value": "SIGNED_TOKEN_HERE" }] },
+            "description": "Downloads a file using a short-lived signed token (1-hour TTL). The token itself is the auth — no Authorization header needed."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Companions",
+      "description": "Companion onboarding review and approval.",
+      "item": [
+        {
+          "name": "List companions",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/admin/companions?status=under_admin_review&page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "admin", "companions"], "query": [{ "key": "status", "value": "under_admin_review" }, { "key": "page", "value": "1" }, { "key": "limit", "value": "20" }] },
+            "description": "status: documents_pending | under_admin_review | active | rejected | suspended."
+          }
+        },
+        {
+          "name": "Get companion",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/admin/companions/{{companionId}}", "host": ["{{baseUrl}}"], "path": ["api", "admin", "companions", "{{companionId}}"] }
+          }
+        },
+        {
+          "name": "Approve document",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/companions/{{companionId}}/documents/{{docId}}/approve", "host": ["{{baseUrl}}"], "path": ["api", "admin", "companions", "{{companionId}}", "documents", "{{docId}}", "approve"] },
+            "description": "Approves a single uploaded document. Optional note in body."
+          }
+        },
+        {
+          "name": "Reject document",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"note\": \"ID image is blurry; please re-upload a clearer photo.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/companions/{{companionId}}/documents/{{docId}}/reject", "host": ["{{baseUrl}}"], "path": ["api", "admin", "companions", "{{companionId}}", "documents", "{{docId}}", "reject"] },
+            "description": "Rejects a single document. note (min 3 chars) is required."
+          }
+        },
+        {
+          "name": "Approve account",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/companions/{{companionId}}/approve", "host": ["{{baseUrl}}"], "path": ["api", "admin", "companions", "{{companionId}}", "approve"] }
+          }
+        },
+        {
+          "name": "Reject account",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"note\": \"Documents incomplete after multiple revisions.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/companions/{{companionId}}/reject", "host": ["{{baseUrl}}"], "path": ["api", "admin", "companions", "{{companionId}}", "reject"] }
+          }
+        },
+        {
+          "name": "Reactivate account",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/admin/companions/{{companionId}}/reactivate", "host": ["{{baseUrl}}"], "path": ["api", "admin", "companions", "{{companionId}}", "reactivate"] },
+            "description": "Reverses a rejected/suspended state back to active."
+          }
+        },
+        {
+          "name": "Quick setup (demo only)",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/admin/companions/{{companionId}}/quick-setup", "host": ["{{baseUrl}}"], "path": ["api", "admin", "companions", "{{companionId}}", "quick-setup"] },
+            "description": "Demo shortcut: activates the companion + creates default profile + sets 100 SAR rate per service type. Bypasses normal onboarding."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Document Types",
+      "description": "Manage the catalog of required companion documents.",
+      "item": [
+        {
+          "name": "List document types",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/admin/document-types", "host": ["{{baseUrl}}"], "path": ["api", "admin", "document-types"] }
+          }
+        },
+        {
+          "name": "Create document type",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"code\": \"driving_license\",\n  \"label_ar\": \"رخصة قيادة\",\n  \"label_en\": \"Driving License\",\n  \"is_required\": true,\n  \"sort_order\": 10\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/document-types", "host": ["{{baseUrl}}"], "path": ["api", "admin", "document-types"] }
+          }
+        },
+        {
+          "name": "Update document type",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"label_ar\": \"رخصة قيادة سارية\",\n  \"sort_order\": 5\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/document-types/{{docTypeId}}", "host": ["{{baseUrl}}"], "path": ["api", "admin", "document-types", "{{docTypeId}}"] }
+          }
+        },
+        {
+          "name": "Deactivate document type",
+          "request": {
+            "method": "PATCH",
+            "url": { "raw": "{{baseUrl}}/api/admin/document-types/{{docTypeId}}/deactivate", "host": ["{{baseUrl}}"], "path": ["api", "admin", "document-types", "{{docTypeId}}", "deactivate"] }
+          }
+        },
+        {
+          "name": "Activate document type",
+          "request": {
+            "method": "PATCH",
+            "url": { "raw": "{{baseUrl}}/api/admin/document-types/{{docTypeId}}/activate", "host": ["{{baseUrl}}"], "path": ["api", "admin", "document-types", "{{docTypeId}}", "activate"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Withdrawals",
+      "description": "Review and process companion withdrawal requests.",
+      "item": [
+        {
+          "name": "List withdrawals",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/admin/withdrawals?status=pending&page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "admin", "withdrawals"], "query": [{ "key": "status", "value": "pending" }, { "key": "page", "value": "1" }, { "key": "limit", "value": "20" }] }
+          }
+        },
+        {
+          "name": "Approve withdrawal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/withdrawals/{{withdrawalId}}/approve", "host": ["{{baseUrl}}"], "path": ["api", "admin", "withdrawals", "{{withdrawalId}}", "approve"] }
+          }
+        },
+        {
+          "name": "Reject withdrawal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"note\": \"Insufficient documentation provided.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/withdrawals/{{withdrawalId}}/reject", "host": ["{{baseUrl}}"], "path": ["api", "admin", "withdrawals", "{{withdrawalId}}", "reject"] }
+          }
+        },
+        {
+          "name": "Mark paid",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/admin/withdrawals/{{withdrawalId}}/mark-paid", "host": ["{{baseUrl}}"], "path": ["api", "admin", "withdrawals", "{{withdrawalId}}", "mark-paid"] },
+            "description": "Marks an approved withdrawal as paid after offline bank transfer."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Support",
+      "description": "Manage user support tickets.",
+      "item": [
+        {
+          "name": "List tickets",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/admin/support/tickets?status=open&page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "admin", "support", "tickets"], "query": [{ "key": "status", "value": "open" }, { "key": "page", "value": "1" }, { "key": "limit", "value": "20" }] }
+          }
+        },
+        {
+          "name": "Respond to ticket",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"response\": \"We checked the refund — it was processed on 2026-06-01. Please check your Moyasar statement.\",\n  \"status\": \"resolved\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/support/tickets/{{ticketId}}/respond", "host": ["{{baseUrl}}"], "path": ["api", "admin", "support", "tickets", "{{ticketId}}", "respond"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Users",
+      "description": "Direct user management. Note: POST creates any role (client/companion/admin).",
+      "item": [
+        {
+          "name": "List users",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/admin/users?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "admin", "users"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "20" }, { "key": "account_type", "value": "client", "disabled": true }, { "key": "search", "value": "ahmad", "disabled": true }] }
+          }
+        },
+        {
+          "name": "Get user",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/admin/users/{{userId}}", "host": ["{{baseUrl}}"], "path": ["api", "admin", "users", "{{userId}}"] }
+          }
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"first_name\": \"Sara\",\n  \"last_name\": \"AlOmari\",\n  \"gender\": \"female\",\n  \"date_of_birth\": \"1992-08-14\",\n  \"email\": \"sara@example.com\",\n  \"mobile\": \"0533334444\",\n  \"password\": \"Secret123\",\n  \"account_type\": \"admin\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/users", "host": ["{{baseUrl}}"], "path": ["api", "admin", "users"] },
+            "description": "Creates a user directly without OTP verification. account_type: client | companion | admin."
+          }
+        },
+        {
+          "name": "Suspend user",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/admin/users/{{userId}}/suspend", "host": ["{{baseUrl}}"], "path": ["api", "admin", "users", "{{userId}}", "suspend"] }
+          }
+        },
+        {
+          "name": "Unsuspend user",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/api/admin/users/{{userId}}/unsuspend", "host": ["{{baseUrl}}"], "path": ["api", "admin", "users", "{{userId}}", "unsuspend"] }
+          }
+        },
+        {
+          "name": "Change user role",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"account_type\": \"admin\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/users/{{userId}}/change-role", "host": ["{{baseUrl}}"], "path": ["api", "admin", "users", "{{userId}}", "change-role"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Settings",
+      "description": "Runtime feature flags (payment mode + storage backend).",
+      "item": [
+        {
+          "name": "Get payment mode",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/admin/settings/payment-mode", "host": ["{{baseUrl}}"], "path": ["api", "admin", "settings", "payment-mode"] }
+          }
+        },
+        {
+          "name": "Set payment mode",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"mode\": \"demo\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/settings/payment-mode", "host": ["{{baseUrl}}"], "path": ["api", "admin", "settings", "payment-mode"] },
+            "description": "mode: live | demo. Demo mode bypasses Moyasar and auto-marks invoices as paid."
+          }
+        },
+        {
+          "name": "Get storage backend",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/admin/settings/storage-backend", "host": ["{{baseUrl}}"], "path": ["api", "admin", "settings", "storage-backend"] }
+          }
+        },
+        {
+          "name": "Set storage backend",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"backend\": \"local\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/admin/settings/storage-backend", "host": ["{{baseUrl}}"], "path": ["api", "admin", "settings", "storage-backend"] },
+            "description": "backend: local | firebase. Old files keep loading via the backend they were uploaded with."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "description": "External integrations. Not called by the SPA.",
+      "item": [
+        {
+          "name": "Moyasar webhook",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "x-moyasar-signature", "value": "HMAC_SIGNATURE_FROM_MOYASAR" }],
+            "body": { "mode": "raw", "raw": "{\n  \"type\": \"payment_paid\",\n  \"data\": { \"id\": \"moyasar_invoice_id\", \"status\": \"paid\" }\n}" },
+            "url": { "raw": "{{baseUrl}}/webhooks/moyasar", "host": ["{{baseUrl}}"], "path": ["webhooks", "moyasar"] },
+            "description": "Moyasar payment status webhook. Verified via HMAC signature in x-moyasar-signature header."
+          }
+        }
+      ]
+    }
+  ]
+}
