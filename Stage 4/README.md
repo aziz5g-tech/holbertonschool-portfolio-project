@@ -296,7 +296,7 @@ Because the MVP is a monolith deployed as a single Node.js application serving i
 |------|----------|--------|
 | **ESLint** (`npm run lint` → `eslint .`) | Both `backend/` and `frontend/` | ✅ Clean as merge gate on every PR; also enforced by CI |
 | **Jest** (`npm test`) | 6 core services: `auth`, `payment`, `companion-request`, `request`, `admin.user`, `wallet` | ✅ **33 unit tests** passing in ~9 s (added in closeout — see Post-Sprint Hardening) |
-| **Postman collection** (`Docs/Rafeeq.postman_collection.json`) | All 94 API endpoints in 25 folders, with body examples and environment variables | ✅ Importable artifact, ready for regression runs (added in closeout) |
+| **Postman collection** ([Rafeeq.postman_collection.json](./Rafeeq.postman_collection.json)) | All 94 API endpoints in 25 folders, with body examples and environment variables | ✅ Importable artifact, ready for regression runs (added in closeout) |
 | **GitHub Actions CI/CD** (`.github/workflows/ci.yml`) | Backend ESLint + Jest on every PR to `development` and `main` | ✅ Required check before merge (added in closeout) |
 | **Manual critical-flow checklist** (from `Docs/scm-and-qa.md`) | Auth, request, trip, payment, admin, realtime | ✅ Executed before every release-to-staging |
 | **Browser DevTools** | Frontend errors, network failures, layout regressions | ✅ Used by all team members during development |
@@ -347,7 +347,7 @@ The checklist below was executed against staging at the end of Sprint 4 (2026-06
 | **Project management board** | GitHub Projects: https://github.com/users/aziz5g-tech/projects/2 — cards linked to Issues and PRs; columns reflect sprint state |
 | **Bug tracking** | `fix/<scope>` branch naming convention + `Docs/STATUS.md` fix log — see Task 2 bug table. Full history: `git log --all --oneline \| grep "^[a-f0-9]* fix:"` |
 | **Automated test suite** | `backend/tests/unit/*.test.js` — Jest, 33 scenarios across 6 services. Run with `cd backend && npm test`. See Task 4 QA tooling table |
-| **API documentation** | `Docs/Rafeeq.postman_collection.json` — Postman v2.1 collection, 94 endpoints in 25 folders, importable as-is |
+| **API documentation** | [Rafeeq.postman_collection.json](./Rafeeq.postman_collection.json) — Postman v2.1 collection, 94 endpoints in 25 folders, importable as-is |
 | **CI/CD pipeline** | `.github/workflows/ci.yml` — runs ESLint + Jest on every PR. Status visible at https://github.com/aziz5g-tech/Rafeeq/actions |
 | **Branch protection** | Configured on `main` (PR + 1 review + CI required) and `development` (PR + CI required). Visible at https://github.com/aziz5g-tech/Rafeeq/settings/branches |
 | **Testing evidence and results** | Task 4 manual critical-flow table (17 flows, 100% pass) + Jest 33/33 passing + ESLint-clean on all merged PRs (enforced by CI) |
