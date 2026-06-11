@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>رفيق — RAFEEQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      
+      --bg: #fff8e8;          /* light beige */
+      --bg2: #03045e;         /* Dark Blue */
+      --surface: #ffffff;
+      --border: rgba(17, 27, 102, 0.1);
+      --text: #03045e;        /* Dark Blue for Text */
+      --muted: #555566;
+      --accent: #03045e;       /* اDark Blue For main Buttons */
+      --accent2: #91e5f6;      /* Light Blue */
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cairo', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(250, 246, 238, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .nav-links a:hover { opacity: 0.7; }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #fff !important;
+      padding: 0.45rem 1.3rem;
+      border-radius: 50px; 
+      font-weight: 600 !important;
+      transition: opacity 0.2s !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+    }
+
+    /* ── IMG ── */
+    .slider-container {
+      width: 100%;
+      max-width: 900px;
+      margin-bottom: 3rem;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(17, 27, 102, 0.08);
+      border: 1px solid var(--border);
+    }
+
+.swiper {
+      width: 100%;
+      height: 480px;
+    }
+
+    .swiper-slide img {
+      width: auto;
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      margin: 0 auto;
+      display: block;
+    }
+
+    
+    .swiper-pagination-bullet-active {
+      background: var(--accent) !important;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(17, 27, 102, 0.05);
+      border: 1px solid rgba(17, 27, 102, 0.2);
+      color: var(--text);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.3rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1.25rem;
+      max-width: 800px;
+    }
+
+    .hero h1 span { color: #2563eb; }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.9; }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: #fff;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-outline:hover { background: rgba(17, 27, 102, 0.03); }
+
+    /* ── SECTION COMMON ── */
+    section {
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #2563eb;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 3.5rem;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── FEATURES ── */
+    #features .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: transform 0.25s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .feature-body { padding: 1.5rem; }
+    .feature-body h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .feature-body p { font-size: 0.95rem; color: var(--muted); }
+
+    /* ── ABOUT ── */
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    .about-story p { color: var(--muted); margin-bottom: 1rem; }
+    
+    .team-heading { font-weight: 700; margin-bottom: 1.5rem; }
+    .team-members { display: flex; flex-direction: column; gap: 1.5rem; }
+    .member-card { display: flex; align-items: center; gap: 1rem; }
+    
+    .member-avatar-placeholder {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--border); display: flex; align-items: center;
+      justify-content: center; font-weight: 600;
+    }
+
+    .member-info { flex: 1; }
+    .member-name { font-weight: 700; font-size: 0.95rem; }
+    .member-role { font-size: 0.85rem; color: var(--muted); }
+    .member-links a { color: var(--text); font-size: 0.85rem; text-decoration: none; margin-left: 0.75rem; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    footer a { color: var(--text); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="nav-logo">Rafeeq — رفيق</a>
+    <ul class="nav-links">
+      <li><a href="#features">المميزات</a></li>
+      <li><a href="#about">من نحن</a></li>
+      <li><a href="https://rafeeqsa.me/" class="nav-cta">ابدأ الآن ←</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+
+    <div class="slider-container">
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <img src="site_1.png" alt="خدمات رفيق في مكان واحد" />
+          </div>
+          <div class="swiper-slide">
+            <img src="site_2.png" alt="خطوات الطلب بكل أمان" />
+          </div>
+          <div class="swiper-slide">
+            <img src="site_3.png" alt="لأن الرفقة مهارة انضم إلينا" />
+          </div>
+          <div class="swiper-slide">
+            <img src="site_4.png" alt="أهلاً نحن رفيق" />
+          </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+
+    <div class="badge">✦ مشروع تخرج — أكاديمية هولبرتون</div>
+
+    <h1>
+      لأن الرفقة مهارة،<br/>
+      <span>منصة رفيق تجمع كبار السن وعائلاتهم برفقاء موثوقين.</span>
+    </h1>
+
+    <p class="hero-desc">
+      خدمات يومية، رعاية صحية ووقائية، ودعم اجتماعي يصلك أينما كنت بكل طمأنينة وكرامة.
+    </p>
+
+    <div class="hero-actions">
+      <a href="https://rafeeqsa.me/" class="btn-primary">عرض التطبيق التجريبي</a>
+      <a href="https://github.com/aziz5g-tech/Rafeeq" class="btn-outline">مستودع GitHub</a>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <section id="features">
+    <p class="section-label">ماذا نقدم</p>
+    <h2 class="section-title">كل ما تحتاجه في مكان واحد</h2>
+    <p class="section-sub">رفيق يقدم خدمات متنوعة تلبي جميع احتياجاتك اليومية.</p>
+
+    <div class="grid">
+      <div class="feature-card">
+        <div class="feature-body">
+          <h3>مرافقة صحية</h3>
+          <p>تواكب مع كبار السن في زياراتهم للأطباء وعمل الفحوصات.</p>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-body">
+          <h3>مساعدة في التسوق</h3>
+          <p>مساعدة في التسوق وشراء الاحتياجات اليومية بكل سهولة.</p>
+        </div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-body">
+          <h3>توصيل وتنقل</h3>
+          <p>توصيل آمن للمواعيد الطبية والاجتماعية مع مرافق مدرب.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section id="about">
+    <p class="section-label">قصتنا</p>
+    <h2 class="section-title">عن مشروع رفيق</h2>
+
+    <div class="about-inner">
+      <div class="about-story">
+        <p>
+          انطلقت فكرة رفيق من الرغبة في توفير بيئة آمنة وداعمة لأحبائنا من كبار السن، لتمكينهم من الحصول على خدمات مرافقة يومية ورعاية وقائية مرنة تلبي تطلعات عائلاتهم.
+        </p>
+        <p>
+          هذا العمل هو مشروع التخرج لفريقنا في <strong>أكاديمية هولبرتون (Holberton School)</strong>، وتم تطويره خلال دورة تخطيط وإطلاق المنتجات البرمجية (MVP).
+        </p>
+      </div>
+
+      <div>
+        <p class="team-heading">تم التطوير بواسطة</p>
+        <div class="team-members">
+          <div class="member-card">
+            <div class="member-avatar-placeholder">SR</div>
+            <div class="member-info">
+              <p class="member-name">صِبا</p>
+              <p class="member-role">Project Manager - UI/UX - Frontend</p>
+              <div class="member-links">
+                <a href="www.linkedin.com/in/sebaryry">LinkedIn</a>
+              </div>
+            </div>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar-placeholder">NJ</div>
+            <div class="member-info">
+              <p class="member-name">عبدالعزيز</p>
+              <p class="member-role">Backend - Phases Leader</p>
+                <div class="member-links">
+                <a href="www.linkedin.com/in/aziz5g">LinkedIn</a>
+              </div>
+            </div>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar-placeholder">AA</div>
+            <div class="member-info">
+              <p class="member-name">نورة</p>
+              <p class="member-role">Backend - Database</p>
+               <div class="member-links">
+                <a href="www.linkedin.com/in/#">LinkedIn</a>
+              </div>
+            </div>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar-placeholder">SH</div>
+            <div class="member-info">
+              <p class="member-name">شذى</p>
+              <p class="member-role">UI/UX - Frontend</p>
+               <div class="member-links">
+                <a href="www.linkedin.com/in/shatha-alsawilam-0b8aa529b">LinkedIn</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 رفيق — جميع الحقوق محفوظة</span>
+    <div style="display:flex; gap:1.5rem;">
+      <a href="#">التطبيق التجريبي</a>
+      <a href="#">GitHub</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      loop: true,               
+      autoplay: {
+        delay: 3500,            
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,        
+      },
+      effect: "fade",           
+      fadeEffect: {
+        crossFade: true
+      },
+    });
+  </script>
+</body>
+</html>
