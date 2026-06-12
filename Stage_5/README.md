@@ -53,6 +53,7 @@ The project achieved most of its planned objectives and successfully demonstrate
 
 ---
 
+
 ## Team Retrospective Highlights
 
 The team demonstrated strong collaboration and maintained consistent communication throughout the project. Regular meetings helped ensure alignment on project goals and allowed challenges to be identified and addressed early.
