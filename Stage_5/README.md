@@ -61,3 +61,7 @@ The team demonstrated strong collaboration and maintained consistent communicati
 One of the primary challenges involved coordinating development tasks that depended on multiple system components, particularly during frontend-backend integration. Despite these challenges, the team worked effectively together and successfully delivered a functional MVP.
 
 For future projects, the team would benefit from earlier integration testing, more detailed sprint planning, and additional time allocated for quality assurance and final validation activities.
+
+---
+## Landing Page
+https://sebaalshedokhi.github.io/Rafeeq/
