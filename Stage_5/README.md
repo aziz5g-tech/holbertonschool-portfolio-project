@@ -165,10 +165,10 @@ This section consolidates the four sprint retrospectives conducted during develo
 
 | Member | Primary (technical) role | Process role |
 |---|---|---|
-| **Abdulaziz Alrashedi** | Backend (auth, request lifecycle, payments) | Project Manager |
+| **Abdulaziz Alrashedi** | Backend (auth, request lifecycle, payments) | QA (exploratory, UAT) |
 | **Norah Mohammed Alskran** | Backend + Database Admin | Source Control Manager |
 | **Shatha Alsawilem** | Frontend (UI, design system) | QA Lead |
-| **Seba** | Frontend + Database Admin | QA (exploratory, UAT) |
+| **Seba** | Frontend + Database Admin | Project Manager |
 
 ### What worked well as a team?
 
